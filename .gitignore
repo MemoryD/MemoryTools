@@ -1,0 +1,10 @@
+dist/
+build/
+memorytools.egg-info/
+*.egg-info/
+*.pyc
+
+test/
+src/
+memorytools/__pycache__/
+upx-3.95-win64/
