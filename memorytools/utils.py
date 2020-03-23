@@ -1,9 +1,27 @@
 import os
 import re
 import json
+import time
 from base64 import b64decode
 from setting import *
 
+class Accounts(object):
+    def __init__(self, accounts:list, interval=10):
+        self.index = 0
+        self.interval = interval
+        # self.len = len(accounts)
+        self.accounts = accounts
+        for acco in self.accounts:
+            acco['time'] = 0
+
+    def getNext(self):
+        acco = self.accounts[self.index]
+        time_pass = time.time() - acco['time']
+        if time_pass < self.interval:
+            time.sleep(self.interval - time_pass)
+        self.index = (self.index + 1) % len(self.accounts)
+        acco['time'] = time.time()
+        return acco['app_key'], acco['app_secret']
 
 def non_string_iterable(obj):
     try:
@@ -59,6 +77,12 @@ def judge_language(s):
     return 'both'
 
 if __name__ == '__main__':
-    while True:
-        text = input('输入要识别的文字： ')
-        print(judge_language(text, 'zh-cn'))
+    a = Accounts(XUEERSI_ACCOUNTS)
+    for i in range(10):
+        print(a.getNext())
+        print(time.time())
+        time.sleep(1)
+
+    # while True:
+    #     text = input('输入要识别的文字： ')
+    #     print(judge_language(text, 'zh-cn'))

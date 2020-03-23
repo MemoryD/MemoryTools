@@ -3,8 +3,11 @@ import threading
 import pyperclip as p
 import easygui as g
 from aip import AipOcr
+from base64 import b64encode
 from PIL import Image, ImageGrab
 from io import BytesIO
+from xueersiOCR import MemoryOCR
+from urllib.parse import quote
 from setting import *
 from utils import *
 
@@ -16,9 +19,11 @@ class OCR(object):
     def __init__(self, root):
         self.root = root
         self.is_pause = False
+        self.mode = 'text'
         config = read_config()
         ocr = config['ocr']
-        self.client = AipOcr(ocr['APP_ID'], ocr['API_KEY'], ocr['SECRET_KEY'])
+        self.textocr = AipOcr(ocr['APP_ID'], ocr['API_KEY'], ocr['SECRET_KEY'])
+        self.formulaocr = MemoryOCR(XUEERSI_ACCOUNTS)
 
     def result_ok(self, dic_result):
         return 'words_result' in dic_result
@@ -27,6 +32,17 @@ class OCR(object):
         self.is_pause = not self.is_pause
         self.root.create_menu()
         sysTrayIcon.refresh_menu(self.root.menu_options)
+
+    def turn_mode(self, sysTrayIcon):
+        if self.mode == 'text':
+            self.mode = 'formula'
+        else:
+            self.mode = 'text'
+        self.root.create_menu()
+        sysTrayIcon.refresh_menu(self.root.menu_options)
+
+    def mode_text(self):
+        return '当前：识别文本' if self.mode == 'text' else '当前：识别公式'
 
     def pause_text(self):
         return "开启OCR" if self.is_pause else "暂停OCR"
@@ -58,17 +74,17 @@ class OCR(object):
             ocr['SECRET_KEY'] = fieldValues[2]
             config['ocr'] = ocr
             write_config(config)
-            self.client = AipOcr(ocr['APP_ID'], ocr['API_KEY'], ocr['SECRET_KEY'])
+            self.textocr = AipOcr(ocr['APP_ID'], ocr['API_KEY'], ocr['SECRET_KEY'])
 
-    def image2text(self, image):
+    def img2text(self, image):
         '''
         先使用精确版API，如果次数到了，再使用普通版。
         '''
-        dic_result = self.client.basicAccurate(image)
+        dic_result = self.textocr.basicAccurate(image)
         if self.result_ok(dic_result):
             res = dic_result['words_result']
         else:
-            dic_result = self.client.basicGeneral(image)
+            dic_result = self.textocr.basicGeneral(image)
             if self.result_ok(dic_result):
                 res = dic_result['words_result']
             else:
@@ -81,6 +97,30 @@ class OCR(object):
 
         return result
 
+    def pil2bytes(self, im, img_type='png'):
+        bf = BytesIO()
+        im.save(bf, img_type)
+        img = bf.getvalue()
+        return img
+
+    def img2formula(self, img):
+        reslist = []
+        for scale in range(10, 7, -1):
+            w, h = img.size
+            w = int(0.1 * scale * w)
+            im = img.resize((w, h))
+            im = quote(b64encode(self.pil2bytes(im)))
+            res = self.formulaocr.ocr(im)
+            if len(res) == 1:
+                print(0.1 * scale)
+                return res[0]
+            reslist += res
+
+        # res = '\n'.join(res)
+        reslist = sorted(reslist, key = lambda i:len(i), reverse=True)
+        print(reslist)
+        return reslist[0]
+
     def start(self):
         while True:
             time.sleep(0.2)
@@ -89,10 +129,14 @@ class OCR(object):
             im = ImageGrab.grabclipboard()          # 获取剪切板
 
             if isinstance(im, Image.Image):         # 判断是否是图片
-                bf = BytesIO()
-                im.save(bf, 'png')
+                # bf = BytesIO()
+                # im.save(bf, 'png')
+                # img = bf.getvalue()
                 try:
-                    text = self.image2text(bf.getvalue())
+                    if self.mode == 'text':
+                        text = self.img2text(self.pil2bytes(im))
+                    else:
+                        text = self.img2formula(im)
                 except Exception as e:
                     text = str(e)
 

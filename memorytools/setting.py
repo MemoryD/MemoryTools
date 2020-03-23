@@ -67,13 +67,162 @@ LANGUAGE = {    '自动检测':'', '中文':'zh-cn','中文繁体':'zh-tw', '英
 REMOVE_PUNCTUATION_MAP = dict((ord(char), None) for char in string.punctuation)
 NOTAS = u'[’·°–!"#$%&\'()*+,-./:;<=>?@，。?★、…【】（）《》？“”‘’！[\\]^_`{|}~]+'
 
-XUEERSI_KEYS = [
+# 学而思AI开方平台的账号
+XUEERSI_ACCOUNTS = [
+    {
+        'app_key': '2a449a7feb2a73b99e6d2b2f3642aa9e73e40e64',
+        'app_secret': 'dd8f56acf88895367c738cd9c1255507d081746210c5dbee3022795ba9cc9b83'
+    },
     {
         'app_key': '5aa0ae48e4b03fe034cb547f9ebfa47190d88739',
-        'spp_secret': '96bc4d214831921740fcc383681460f4a60558992ac1c20cba85da49f2fb408f'
+        'app_secret': '96bc4d214831921740fcc383681460f4a60558992ac1c20cba85da49f2fb408f'
     },
     {
         'app_key': 'cde7ff598c932b589b80d8b8c84aee88f563ff93',
         'app_secret': '3aeb7acbe8b5f3118da2bf59db42d0cbbf4237453fd3f03bee721c52a02eafcc'
+    },
+    {
+        'app_key': 'b8818b44c59c420848ed01eff8e965b315510cf0',
+        'app_secret': 'e3d70584da64bea52af859866b7d5bd1b6eaeed6f0dde333bbf17f6b4af72dea'
     }
 ]
+
+# 学而思平台的所有错误码，来源：https://docai.xueersi.com/books/ai%E6%95%99%E8%82%B2%E5%BC%80%E6%94%BE%E5%B9%B3%E5%8F%B0/page/%E8%BF%94%E5%9B%9E%E7%A0%81%E5%88%97%E8%A1%A8
+ERROR_CODES = {
+    -15000 : {'reason': 'json字符串化发生错误', 'solution': '联系客服linqi@100tal.com，反映此问题'},
+    -15001 : {'reason': 'json对象化发生错误', 'solution': '检查发送给API接口的请求Body中，字符串是否符合Json结构'},
+    -15002 : {'reason': '内部请求错误', 'solution': '联系客服linqi@100tal.com，反映此问题'},
+    -15101 : {'reason': 'OCR服务内部异常', 'solution': '联系客服linqi@100tal.com，反映此问题'},
+    14000 : {'reason': '参数非法', 'solution': '检查请求参数是否缺失，或参数类型有误'},
+    14001 : {'reason': '缺少app_key参数', 'solution': '检查是否缺失"app_key"参数'},
+    14002 : {'reason': '缺少time_stamp参数', 'solution': '检查是否缺失"time_stamp"参数'},
+    14003 : {'reason': '缺少nonce_str参数', 'solution': '检查是否缺失"nonce_str"参数或长度是否满足要求(1-32个字符长度)'},
+    14004 : {'reason': '缺少sign参数', 'solution': '检查是否缺失"sign"参数'},
+    14005 : {'reason': '图像不存在', 'solution': '检查传入图像URL是否有效，或者图像Base64是否完整且规范'},
+    14011 : {'reason': '应用不存在', 'solution': '检查当前请求API的URL拼写是否正确'},
+    14012 : {'reason': '请求签名无效', 'solution': '检查签名是否正确，或尝试重新获取签名'},
+    14013 : {'reason': 'time_stamp参数无效', 'solution': '检查"time_stamp"参数是否有误'},
+    15001 : {'reason': 'qps超过限制', 'solution': '您的每秒并发量超过了最大限制，请降低并发量重试；或者联系客服申请提高每秒并发量限制'},
+    15002 : {'reason': 'qpd超过限制', 'solution': '您的每日调用量超过了最大限制，请隔日再试；或者联系客服申请提高每日调用量限制'},
+    15003 : {'reason': 'qpm超过限制', 'solution': '您的每分钟并发量超过了最大限制，请降低并发量重试；或者联系客服申请提高每秒并发量限制'},
+    15004 : {'reason': 'interval超过限制', 'solution': '接口调用频率超过访问允许间隔。如果是试用账号，请登录后使用自己的账号。如果希望扩容，请联系商务为您免费提高调用频率。'},
+    15010 : {'reason': '图片解析失败，请重试', 'solution': '检查图片URL是否有效，或者图像Base64是否完整 且规范'},
+    15011 : {'reason': '图片有些问题，请重新拍照', 'solution': '检查图片成像是否正常，图片内部是否有有效图案'},
+    15012 : {'reason': '图片太暗啦，请开启照明', 'solution': '检查图片成像是否过暗，尝试开启闪光灯拍照重试'},
+    15013 : {'reason': '图片太模糊啦，请保证拍照清晰', 'solution': '检查图片成像是否模糊，请保证拍照清晰之后重试'},
+    15020 : {'reason': '客户端发包异常', 'solution': '检查网络是否有波动'},
+    15021 : {'reason': 'Sid获取异常', 'solution': '联系客服linqi@100tal.com，反映此问题'},
+    15022 : {'reason': 'Idx获取异常', 'solution': '联系客服linqi@100tal.com，反映此问题'},
+    15023 : {'reason': '图像获取异常', 'solution': '检查图片URL是否有效，或者图像Base64是否完整且规范'},
+    15024 : {'reason': '图像损坏', 'solution': '检查图片成像是否正常，图片内部是否有有效图案'},
+    15025 : {'reason': '图像模糊', 'solution': '检查图片成像是否模糊，请保证传入清晰图片重试'},
+    15026 : {'reason': '其他图像异常', 'solution': '检查图片问题，或联系客服linqi@100tal.com，反映此问题'},
+    15100 : {'reason': '传入图像尺寸过大或过小', 'solution': '不能大于4MB,长边不能超过4096,短边不能小于15'},
+    16010 : {'reason': 'base64音频编码为[]byte失败', 'solution': '检查base64音频内容是否无效'},
+    16011 : {'reason': '构造请求消息结构失败', 'solution': '检查发送参数是否不符合规范'},
+    16012 : {'reason': '解码服务器返回的响应body中，未获取到响应数据', 'solution': '联系客服linqi@100tal.com，反映此问题'},
+    16013 : {'reason': '对解码服务器发送的http请求，请求失败或未响应', 'solution': '联系客服linqi@100tal.com，反映此问题'},
+    16014 : {'reason': 'socket接收失败', 'solution': 'socket接收失败'},
+    16015 : {'reason': '拉学生名单错误', 'solution': '输入学生名单有误，请检查。'},
+    16016 : {'reason': '解码器返回超时，比如端长时间占用连接', 'solution': '解码服务器连接超时，请稍后再试。'},
+    16017 : {'reason': 'Sid提前结束', 'solution': '您的这段语音已完成识别或者测评。'},
+    16018 : {'reason': '解码器目前繁忙', 'solution': '服务器繁忙，请稍后重试。'},
+    16107 : {'reason': '音频格式错误', 'solution': '请检查您的传入音频格式是否是允许的格式'},
+    16108 : {'reason': '评测文本格式错误，如出现了违规字符', 'solution': '请检查您的传入评测文本是否包含违规字符'},
+    16019 : {'reason': '解码器返回数据无有效声音', 'solution': '请检查您的传入音频是否有有效信息。'},
+    16020 : {'reason': 'pcm错误', 'solution': '请检查您的传入音频是否完整且有效'},
+    16100 : {'reason': 'WebSocket建立连接时，请求协议不是WebSocket握手', 'solution': '请检查您的WebSocket连接'},
+    16101 : {'reason': 'WebSocket建立连接时，无法设置WebSocket连接', 'solution': '请检查您的WebSocket连 接'},
+    16102 : {'reason': '可能是您的WebSocket长链接异常中断了，在WebSocket长连接中，服务端无法正常读取消息', 'solution': '请检查您的WebSocket连接'},
+    16103 : {'reason': '您传入的请求json中：common参数部分的idx属性不是字符型数字', 'solution': '请检查 您的请求数据common中idx的数据类型'},
+    16104 : {'reason': '您传入的请求json中：spec参数部分的assessRef评测文本为空', 'solution': '请检查您 的请求数据spec中是否包含assessRef'},
+    16105 : {'reason': '没有sid或者idx，或者在需要assess_ref的业务中没有传', 'solution': '请检查传入参数中是否缺失sid或idx或assess_ref。'},
+    16106 : {'reason': '音频数据为空', 'solution': '请检查您的传入音频是否有有效信息。'},
+    16109 : {'reason': '此sid已经结束', 'solution': '当前sid服务端已经处理结束'},
+    16110 : {'reason': '此sid已经完全结束', 'solution': '当前sid服务端已经处理结束且触发超时，处于待清理状态'},
+    16111 : {'reason': '您传入的请求json中：common参数部分的sid属性长度不符合长度要求(16-64个字符)', 'solution': '请检查您的传入的sid是否符合要求的长度'}
+    }
+
+a = {
+    'code': 0, 
+    'msg': '请求成功', 
+    'data': 
+    {'recognition': 
+        {
+            'ocrId': None, 
+            'ocrLinesList': 
+                [
+                    {
+                        'data': 
+                            [
+                                {
+                                    'alp': None, 'height': 15, 'type': 'word', 'value': 'n', 'width': 6, 'x': 463, 'y': 5
+                                }, 
+                                {
+                                    'alp': None, 'height': 15, 'type': 'word', 'value': '  ', 'width': 6, 'x': 469, 'y': 5
+                                }
+                            ], 
+                        'type': 'p'
+                    }, 
+                    {
+                        'data': 
+                            [
+                                {
+                                    'alp': None, 'height': 59, 'type': 'word', 'value': ' E \\left[ \\nu (t) \\right] =- \\frac{1}{2} \\sum _{i=1}^{n} \\sum _{j \\neq i}w_{ij}v_{i}(t)v_{j}(t)- ', 'width': 432, 'x': 6, 'y': 5
+                                }, 
+                                {
+                                    'alp': None, 'height': 35, 'type': 'word', 'value': 'Σ', 'width': 68, 'x': 438, 'y': 16
+                                }, 
+                                {
+                                    'alp': None, 'height': 35, 'type': 'word', 'value': 'I', 'width': 68, 'x': 506, 'y': 16
+                                }, 
+                                {
+                                    'alp': None, 'height': 35, 'type': 'word', 'value': ',', 'width': 68, 'x': 575, 'y': 16
+                                }, 
+                                {
+                                    'alp': None, 'height': 35, 'type': 'word', 'value': ',', 'width': 68, 'x': 643, 'y': 16
+                                }, 
+                                {
+                                    'alp': None, 'height': 35, 'type': 'word', 'value': '(', 'width': 68, 'x': 712, 'y': 16
+                                }, 
+                                {
+                                    'alp': None, 'height': 35, 'type': 'word', 'value': '1', 'width': 68, 'x': 781, 'y': 16
+                                }, 
+                                {
+                                    'alp': None, 'height': 35, 'type': 'word', 'value': ') ', 'width': 68, 'x': 849, 'y': 16
+                                }
+                            ], 
+                            'type': 'p'
+                        }, 
+                    {
+                        'data': 
+                            [
+                                {
+                                    'alp': None, 'height': 18, 'type': 'word', 'value': 'i', 'width': 6, 'x': 452, 'y': 49
+                                }, 
+                                {
+                                    'alp': None, 'height': 18, 'type': 'word', 'value': '=', 'width': 6, 'x': 458, 'y': 49
+                                }, 
+                                {
+                                    'alp': None, 'height': 18, 'type': 'word', 'value': '1 ', 'width': 6, 'x': 464, 'y': 49
+                                }
+                            ], 
+                        'type': 'p'
+                    }
+                ], 
+            'textLinePosition': 
+                [
+                    [446, 5, 479, 21], 
+                    [6, 5, 555, 64], 
+                    [452, 49, 470, 67]
+                ]
+        }, 
+        'content': 
+            [   
+                'n  ', 
+                ' E \\left[ \\nu (t) \\right] =- \\frac{1}{2} \\sum _{i=1}^{n} \\sum _{j \\neq i}w_{ij}v_{i}(t)v_{j}(t)- ΣI,,(1) ', 
+                'i=1 '
+            ], 
+            'loc': None
+    }
+    }

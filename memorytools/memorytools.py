@@ -31,6 +31,7 @@ class Root(object):
                                         )),
                             ('OCR识别', None, (
                                         (self.ocr.pause_text(), None, self.ocr.pause_ocr),
+                                        (self.ocr.mode_text(), None, self.ocr.turn_mode),
                                         ('API设置', None, self.ocr.setting),
                                         )),
                             ('休息提醒', None, (
