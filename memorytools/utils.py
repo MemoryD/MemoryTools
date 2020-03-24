@@ -3,25 +3,18 @@ import re
 import json
 import time
 from base64 import b64decode
+from io import BytesIO
 from setting import *
 
-class Accounts(object):
-    def __init__(self, accounts:list, interval=10):
+class Color(object):
+    def __init__(self):
+        self.colors = COLOR
         self.index = 0
-        self.interval = interval
-        # self.len = len(accounts)
-        self.accounts = accounts
-        for acco in self.accounts:
-            acco['time'] = 0
-
-    def getNext(self):
-        acco = self.accounts[self.index]
-        time_pass = time.time() - acco['time']
-        if time_pass < self.interval:
-            time.sleep(self.interval - time_pass)
-        self.index = (self.index + 1) % len(self.accounts)
-        acco['time'] = time.time()
-        return acco['app_key'], acco['app_secret']
+        
+    def next(self):
+        color = self.colors[self.index]
+        self.index = (self.index + 1) % (len(self.colors))
+        return color
 
 def non_string_iterable(obj):
     try:
@@ -31,6 +24,8 @@ def non_string_iterable(obj):
     else:
         return not isinstance(obj, str)
 
+def getRect(x1, y1, x2, y2):
+    return [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]
 
 def get_pic(pic_code, pic_name):
     with open(pic_name, 'wb') as image:
@@ -38,8 +33,8 @@ def get_pic(pic_code, pic_name):
 
 
 def read_config(name=CONFIG):
-    if name == CONFIG and not os.path.exists(name):
-        reset_config()
+    # if name == CONFIG and not os.path.exists(name):
+    #     reset_config()
 
     with open(name, "r") as f:
         data = f.read()
@@ -76,13 +71,10 @@ def judge_language(s):
 
     return 'both'
 
-if __name__ == '__main__':
-    a = Accounts(XUEERSI_ACCOUNTS)
-    for i in range(10):
-        print(a.getNext())
-        print(time.time())
-        time.sleep(1)
+def pil2bytes(im, img_type='png', b64=False):
+    bf = BytesIO()
+    im.save(bf, img_type)
+    img = bf.getvalue()
 
-    # while True:
-    #     text = input('输入要识别的文字： ')
-    #     print(judge_language(text, 'zh-cn'))
+    return img
+

@@ -1,12 +1,9 @@
 #!python3
 # -*- coding:utf-8 -*-
 
-import time
-import threading
 import easygui as g
 import pyperclip as p
 from googletransx import Translator
-# from langdetect import detect
 from utils import *
 
 
@@ -17,32 +14,14 @@ class CopyTrans(object):
         self.src = 'en'
         self.dest = 'zh-cn'
         self.strict_mode = False
+        self.last = ''                                                  # 记录上次的剪切板内容
+        self.translator = Translator(service_urls=['translate.google.cn'])   # 获得翻译接口
 
     def turn_language(self, sysTrayIcon):
         self.src, self.dest = self.dest, self.src
         self.last = ''
         self.root.create_menu()
         sysTrayIcon.refresh_menu(self.root.menu_options)
-
-    # def set_src(self, sysTrayIcon):
-    #     msg = "选择一种源语言"
-    #     title = "源语言设置"
-    #     choicess_list = list(LANGUAGE.keys())
-    #     reply = g.choicebox(msg, choices=choicess_list)
-    #     if reply:
-    #         self.src = reply
-    #         self.root.create_menu()
-    #         sysTrayIcon.refresh_menu(self.root.menu_options)
-
-    # def set_dest(self, sysTrayIcon):
-    #     msg = "选择一种目标语言"
-    #     title = "目标语言设置"
-    #     choicess_list = list(LANGUAGE.keys())[1:]
-    #     reply = g.choicebox(msg, choices=choicess_list)
-    #     if reply:
-    #         self.dest = reply
-    #         self.root.create_menu()
-    #         sysTrayIcon.refresh_menu(self.root.menu_options)
 
     def trans(self, translator, source):
         if source == "" or source == self.last:                         # 是否为空或者跟上次一样
@@ -77,14 +56,10 @@ class CopyTrans(object):
             self.last = sentence
 
     def start(self):
-        self.last = ''                                                  # 记录上次的剪切板内容
-        translator = Translator(service_urls=['translate.google.cn'])   # 获得翻译接口
-        while True:
-            time.sleep(0.1)
-            if self.is_pause:                                           # 是否暂停
-                continue
-            source = p.paste()                                          # 获得剪切板内容
-            text = self.trans(translator, source)
+        if self.is_pause:                                           # 是否暂停
+            return
+        source = p.paste()                                          # 获得剪切板内容
+        self.trans(self.translator, source)
 
     def pause_trans(self, sysTrayIcon):
         self.is_pause = not self.is_pause
@@ -107,8 +82,3 @@ class CopyTrans(object):
 
     def strict_text(self):
         return "关闭严格模式" if self.strict_mode else "开启严格模式"
-
-    def run(self):
-        thread = threading.Thread(target=self.start)
-        thread.setDaemon(True)
-        thread.start()

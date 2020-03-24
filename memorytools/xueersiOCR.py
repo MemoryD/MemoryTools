@@ -1,11 +1,12 @@
-import base64
 import time
 import hashlib
 import requests
 import random
 from PIL import Image, ImageDraw
+from base64 import b64encode
 from urllib.parse import quote
 from requests.exceptions import ConnectionError
+from utils import *
 from setting import *
 
 ALPHADIG = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -101,7 +102,10 @@ class MemoryOCR(object):
         for acco in accounts:
             self.ocrs.append(XueersiOCR(acco['app_key'], acco['app_secret']))
 
-    def ocr(self, image: str, img_type=base64):
+    def ocr(self, image: str, img_type='base64'):
+        if isinstance(image, Image.Image):
+            image = quote(b64encode(pil2bytes(image)))
+
         xueersi = self.ocrs[self.index]
         time_pass = time.time() - xueersi.start_time
         if time_pass < self.interval:
@@ -112,16 +116,16 @@ class MemoryOCR(object):
         code = res['code']
         if code != 0:
             if code in ERROR_CODES:
-                return ERROR_CODES[code]['reason']
+                return ([], ERROR_CODES[code]['reason'])
             else:
-                return "由于未知错误，识别失败！"
+                return ([], "由于未知错误，识别失败！")
         if not res['data'] or 'content' not in res['data']:
-            return "由于未知错误，识别失败！"
+            return ([], "由于未知错误，识别失败！")
 
         content = res['data']['content']
-        # content = '\n'.join(res['data']['content'][::-1])
-
-        return content
+        content = '\n\n'.join(content)
+        pos = res['data']['recognition']['textLinePosition']
+        return (pos, content)
         
 
 def getRect(x1, y1, x2, y2):

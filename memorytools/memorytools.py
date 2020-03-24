@@ -4,8 +4,8 @@ import easygui as g
 from ocr import OCR
 from alert import Alert
 from copytrans import CopyTrans
+from threading import Thread
 from systrayicon import SysTrayIcon
-from pic import icon_ico
 from utils import *
 from setting import *
 
@@ -16,8 +16,9 @@ class Root(object):
         self.ct = CopyTrans(self)
         self.ocr = OCR(self)
         self.icon = 'icon.ico'
+        self.end = False
         if not os.path.exists(self.icon):
-            get_pic(icon_ico, self.icon)
+            get_pic(ICON, self.icon)
 
     def about(self, sysTrayIcon):
         g.textbox(msg=ABOUT_MSG, title="关于", text=ABOUT_TEXT)
@@ -32,7 +33,7 @@ class Root(object):
                             ('OCR识别', None, (
                                         (self.ocr.pause_text(), None, self.ocr.pause_ocr),
                                         (self.ocr.mode_text(), None, self.ocr.turn_mode),
-                                        ('API设置', None, self.ocr.setting),
+                                        (self.ocr.newline_text(), None, self.ocr.turn_newline),
                                         )),
                             ('休息提醒', None, (
                                         (self.alert.alert_text(), None, self.alert.pause_alert),
@@ -43,14 +44,20 @@ class Root(object):
         return self.menu_options
 
     def bye(self, sysTrayIcon):
-        pass
+        self.end = True
 
-    def run(self):
-        self.ct.run()
-        self.alert.run()
-        self.ocr.run()
+    def sti(self):
         SysTrayIcon(self.icon, HOVER_TEXT, self.create_menu(), on_quit=self.bye, default_menu_index=1)
 
+    def run(self):
+        thread = Thread(target=self.sti)
+        thread.setDaemon(True)
+        thread.start()
+        while not self.end:
+            time.sleep(0.1)
+            self.ct.start()
+            self.alert.start()
+            self.ocr.start()
 
 if __name__ == '__main__':
     Root().run()

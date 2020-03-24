@@ -34,12 +34,16 @@ class Alert(object):
             self.alert_time = minute
 
     def start(self):
-        while True:
-            if self.is_alert and self.alert():                          # 是否到达预设的提醒时间
-                alert_message = "你已经连续工作 %d 分钟了！是时候休息一下了！\n%s" % (self.alert_time, ALERT_MSG)
-                g.msgbox(alert_message, ok_button="等你想要继续工作了再点我")
-                self.start_time = time.time()                           # 重置开始时间
-            time.sleep(0.2)                                             # 隔 0.1s 检测一次
+        if self.is_alert and self.alert():                          # 是否到达预设的提醒时间
+            alert_message = "你已经连续工作 %d 分钟了！是时候休息一下了！\n%s" % (self.alert_time, ALERT_MSG)
+            g.msgbox(alert_message, ok_button="等你想要继续工作了再点我")
+            self.start_time = time.time()  
+        # while True:
+        #     if self.is_alert and self.alert():                          # 是否到达预设的提醒时间
+        #         alert_message = "你已经连续工作 %d 分钟了！是时候休息一下了！\n%s" % (self.alert_time, ALERT_MSG)
+        #         g.msgbox(alert_message, ok_button="等你想要继续工作了再点我")
+        #         self.start_time = time.time()                           # 重置开始时间
+        #     time.sleep(0.2)                                             # 隔 0.1s 检测一次
 
     def run(self):
         thread = threading.Thread(target=self.start)
