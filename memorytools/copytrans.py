@@ -14,8 +14,13 @@ class CopyTrans(object):
         self.src = 'en'
         self.dest = 'zh-cn'
         self.strict_mode = False
+        self.newline = False
         self.last = ''                                                  # 记录上次的剪切板内容
         self.translator = Translator(service_urls=['translate.google.cn'])   # 获得翻译接口
+
+    def setConfig(self, config):
+        if 'mode' in config:
+            pass
 
     def turnLanguage(self, sysTrayIcon):
         self.src, self.dest = self.dest, self.src
@@ -33,7 +38,10 @@ class CopyTrans(object):
             self.last = source
             return None
 
-        sentence = source.replace("\r", '').replace("\n", " ")          # 去除换行符
+        if not self.newline:
+            sentence = source.replace("\r", '').replace("\n", " ")          # 去除换行符
+        else:
+            sentence = source
 
         try:
             if self.strict_mode:
@@ -66,6 +74,11 @@ class CopyTrans(object):
         self.root.createMenu()
         sysTrayIcon.refreshMenu(self.root.menu_options)
 
+    def turnNewline(self, sysTrayIcon):
+        self.newline = not self.newline
+        self.root.createMenu()
+        sysTrayIcon.refreshMenu(self.root.menu_options)
+
     def pauseText(self):
         return "开启翻译" if self.is_pause else "暂停翻译"
 
@@ -74,6 +87,9 @@ class CopyTrans(object):
             return '英文 --> 中文'
         else:
             return '中文 --> 英文'
+
+    def newlineText(self):
+        return "去除换行：否" if self.newline else "去除换行：是"
 
     def strictText(self):
         return "关闭严格模式" if self.strict_mode else "开启严格模式"

@@ -31,6 +31,7 @@ class Root(object):
                             ('复制翻译', None, (
                                         (self.ct.pauseText(), None, self.ct.pauseTrans),
                                         (self.ct.languageText(), None, self.ct.turnLanguage),
+                                        (self.ct.newlineText(), None, self.ct.turnNewline),
                                         (self.ct.strictText(), None, self.ct.turnStrict)
                                         )),
                             ('OCR识别', None, (
@@ -42,7 +43,7 @@ class Root(object):
                                         (self.alert.alertText(), None, self.alert.pauseAlert),
                                         ('更改时间', None, self.alert.changeTime),
                                         )),
-                            ('关于', None, self.about)
+                            ('关于', 'menu.ico', self.about)
                             )
         return self.menu_options
 

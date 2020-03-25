@@ -153,6 +153,7 @@ class SysTrayIcon(object):
         for option_text, option_icon, option_action, option_id in menu_options[::-1]:
             if option_icon:
                 option_icon = self.prepMenuIcon(option_icon)
+                print(option_icon)
 
             if option_id in self.menu_actions_by_id:
                 item, extras = win32gui_struct.PackMENUITEMINFO(text=option_text,
@@ -171,7 +172,9 @@ class SysTrayIcon(object):
         # First load the icon.
         ico_x = win32api.GetSystemMetrics(win32con.SM_CXSMICON)
         ico_y = win32api.GetSystemMetrics(win32con.SM_CYSMICON)
-        hicon = win32gui.LoadImage(0, icon, win32con.IMAGE_ICON, ico_x, ico_y, win32con.LR_LOADFROMFILE)
+        # hicon = win32gui.LoadImage(0, icon, win32con.IMAGE_ICON, ico_x, ico_y, win32con.LR_LOADFROMFILE)
+        hicon = win32gui.LoadIcon(0, win32con.IDI_APPLICATION)
+        print(hicon)
 
         hdcBitmap = win32gui.CreateCompatibleDC(0)
         hdcScreen = win32gui.GetDC(0)
