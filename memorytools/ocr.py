@@ -16,32 +16,31 @@ class OCR(object):
         self.textocr = BaiduOCR(BAIDU_ACCOUNTS)
         self.formulaocr = LatexOCR(XUEERSI_ACCOUNTS)
 
+    def createMenu(self):
+        menu_options =  (
+                            ("开启OCR", isCheckIcon(not self.is_pause), self.pauseOcr),
+                            ('去除换行', isCheckIcon(not self.newline), self.turnNewline),
+                            ('识别文本', isPickIcon(self.mode=='text'), self.textMode),
+                            ('识别公式', isPickIcon(self.mode=='formula'), self.formulaMode),
+                        )
+
+        return menu_options
+
     def pauseOcr(self, sysTrayIcon):
         self.is_pause = not self.is_pause
-        self.root.createMenu()
-        sysTrayIcon.refreshMenu(self.root.menu_options)
+        self.root.refreshMenu()
 
-    def turnMode(self, sysTrayIcon):
-        if self.mode == 'text':
-            self.mode = 'formula'
-        else:
-            self.mode = 'text'
-        self.root.createMenu()
-        sysTrayIcon.refreshMenu(self.root.menu_options)
+    def textMode(self, sysTrayIcon):
+        self.mode = 'text'
+        self.root.refreshMenu()
+
+    def formulaMode(self, sysTrayIcon):
+        self.mode = 'formula'
+        self.root.refreshMenu()
 
     def turnNewline(self, sysTrayIcon):
         self.newline = not self.newline
-        self.root.createMenu()
-        sysTrayIcon.refreshMenu(self.root.menu_options)
-
-    def pauseText(self):
-        return "开启OCR" if self.is_pause else "暂停OCR"
-
-    def modeText(self):
-        return "识别：文本" if self.mode == 'text' else "识别：公式"
-
-    def newlineText(self):
-        return "换行：是" if self.newline else "换行：否"
+        self.root.refreshMenu()
 
     # def setting(self, sysTrayIcon):
     #     msg = "需要设置百度AI平台(https://ai.baidu.com/)的API才能进行OCR识别"

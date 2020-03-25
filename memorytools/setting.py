@@ -10,6 +10,8 @@ ALERT_MSG = 'tip: 连续在电脑前工作太久容易脱发，得颈椎病，�
 
 CONFIG = 'config.json'
 
+SRC_PATH = 'src'
+
 DEFAULT_CONFIG = {
     'copytrans':
         {
