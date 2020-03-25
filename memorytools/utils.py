@@ -39,7 +39,15 @@ def bs64toImg(pic_code, pic_name):
 def getSrc(pic):
     '''返回对应资源的完整路径'''
     path = os.path.join(SRC_PATH, pic)
-    return os.path.abspath(path)
+    file = os.path.abspath(path)
+
+    if not os.path.exists(SRC_PATH):
+        os.makedirs(SRC_PATH)
+    if not os.path.exists(file):
+        if pic in ICONS:
+            bs64toImg(ICONS[pic], file)
+
+    return file
 
 def isCheckIcon(check):
     '''是否选中（两种状态）'''
@@ -59,18 +67,24 @@ def img2base64(image):
 
 def readConfig(name=CONFIG):
     '''读配置文件'''
-    # if name == CONFIG and not os.path.exists(name):
-    #     resetConfig()
-
-    with open(name, "r") as f:
-        data = f.read()
-        return json.loads(data)
+    if name == CONFIG and not os.path.exists(name):
+        resetConfig()
+    try:
+        with open(name, "r") as f:
+            data = f.read()
+            return json.loads(data)
+    except Exception as e:
+        print(e)
+        return DEFAULT_CONFIG
 
 def writeConfig(data, name=CONFIG):
     '''写配置文件'''
-    data = json.dumps(data)
-    with open(name, "w") as f:
-        f.write(data)
+    try:
+        data = json.dumps(data)
+        with open(name, "w") as f:
+            f.write(data)
+    except Exception as e:
+        print(e)
 
 def resetConfig(name=CONFIG):
     '''重置配置文件'''

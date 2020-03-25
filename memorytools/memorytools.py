@@ -5,25 +5,29 @@ from ocr import OCR
 from alert import Alert
 from copytrans import CopyTrans
 from threading import Thread
-# from systrayicon import SysTrayIcon
 from systray import SysTrayIcon
 from boxes import ImageBox
-from pic import *
 from utils import *
 from setting import *
 
 
 class Root(object):
     def __init__(self):
-        self.icon = 'icon.ico'
+        self.icon = getSrc('icon.ico')
+        config = readConfig()
+        print(config)
         self.alert = Alert(self)
         self.ct = CopyTrans(self)
         self.ocr = OCR(self)
-        self.systray = SysTrayIcon(self.icon, HOVER_TEXT, self.createMenu(), on_quit=self.bye, default_menu_index=1)
+        self.alert.setConfig(config['alert'])
+        self.ct.setConfig(config['copytrans'])
+        self.ocr.setConfig(config['ocr'])
+
+        self.systray = SysTrayIcon(self.icon, HOVER_TEXT, self.createMenu(), \
+            on_quit=self.bye, default_menu_index=1, exit_ico=getSrc('exit.ico'))
+
         self.is_about = False
         self.end = False
-        if not os.path.exists(self.icon):
-            bs64toImg(ICON, self.icon)
 
     def about(self, sysTrayIcon):
         self.is_about = True
@@ -32,7 +36,7 @@ class Root(object):
         self.menu_options = (
                             ('复制翻译', getSrc('trans.ico'), self.ct.createMenu()),
                             ('OCR识别', getSrc('ocr.ico'), self.ocr.createMenu()),
-                            ('休息提醒', getSrc('clock.ico'), self.alert.createMenu()),
+                            ('休息提醒', getSrc('alert.ico'), self.alert.createMenu()),
                             ('关于', getSrc('about.ico'), self.about),
                             )
         return self.menu_options
@@ -42,6 +46,12 @@ class Root(object):
 
     def bye(self, sysTrayIcon):
         self.end = True
+        config = {}
+        config['alert'] = self.alert.getConfig()
+        config['copytrans'] = self.ct.getConfig()
+        config['ocr'] = self.ocr.getConfig()
+        writeConfig(config)
+        print('bye')
 
     def run(self):
         self.systray.start()

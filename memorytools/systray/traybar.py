@@ -29,12 +29,14 @@ class SysTrayIcon(object):
                  menu_options=None,
                  on_quit=None,
                  default_menu_index=None,
-                 window_class_name=None):
+                 window_class_name=None,
+                 exit_ico=None):
 
         self._icon = icon
         self._icon_shared = False
         self._hover_text = hover_text
         self._on_quit = on_quit
+        self.exit_ico = exit_ico
 
         self.refreshMenu(menu_options)
 
@@ -64,7 +66,7 @@ class SysTrayIcon(object):
         self._register_class()
 
     def refreshMenu(self, menu_options):
-        menu_options = menu_options + (('退出', None, self.QUIT),)
+        menu_options = menu_options + (('退出', self.exit_ico, self.QUIT),)
         self._next_action_id = self.FIRST_ID
         self._menu_actions_by_id = set()
         self._menu_options = self._add_ids_to_menu_options(list(menu_options))

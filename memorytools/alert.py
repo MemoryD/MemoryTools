@@ -1,5 +1,5 @@
 from time import time
-from easygui import msgbox, integerbox
+from boxes import LabelBox
 from setting import *
 from utils import *
 
@@ -9,6 +9,19 @@ class Alert(object):
         self.alert_time = wt
         self.is_alert = True
         self.start_time = time()
+
+    def setConfig(self, config):
+        if 'is_alert' in config:
+            self.is_alert = config['is_alert']
+        if 'alert_time' in config:
+            self.alert_time = config['alert_time']
+
+    def getConfig(self):
+        config = {
+            'is_alert': self.is_alert,
+            'alert_time': self.alert_time
+        }
+        return config
 
     def createMenu(self):
         menu_options =  (
@@ -35,7 +48,7 @@ class Alert(object):
         if self.is_alert:
             self.start_time = time()
         else:
-            msgbox("虽然你关掉了休息提醒，但还是要注意身体！")
+            LabelBox().show("虽然你关掉了休息提醒，但还是要注意身体！", '确认')
         self.root.refreshMenu()
 
     def changeTime30(self, sysTrayIcon):
@@ -57,5 +70,5 @@ class Alert(object):
     def start(self):
         if self.is_alert and self.alert():                          # 是否到达预设的提醒时间
             alert_message = "你已经连续工作 %d 分钟了！是时候休息一下了！\n%s" % (self.alert_time, ALERT_MSG)
-            msgbox(alert_message, ok_button="等你想要继续工作了再点我")
+            LabelBox('危险警报').show(alert_message, '等你想要继续工作了再点我')
             self.start_time = time()

@@ -1,8 +1,15 @@
 import string
+from pic import *
 
 ABOUT_MSG = 'memory tools version 1.5.0'
 
 ABOUT_IMG = 'README.png'
+
+ICONS = {
+            'icon.ico': ICON_ICO, 'trans.ico': TRANS_ICO, 'ocr.ico': OCR_ICO,
+            'alert.ico': ALERT_ICO, 'exit.ico': EXIT_ICO, 'about.ico': ABOUT_ICO,
+            'check.ico': CHECK_ICO, 'pick.ico': PICK_ICO
+        } 
 
 HOVER_TEXT = "Memory Tools"
 
@@ -15,14 +22,24 @@ SRC_PATH = 'src'
 DEFAULT_CONFIG = {
     'copytrans':
         {
-
+            'is_trans': True,
+            'newline': False,
+            'strict': False,
+            'mode': 'en2zh',
+            'src': 'en',
+            'dest': 'zh-cn'
         },
-	'ocr' :
-		{ 
-			'APP_ID' : '', 
-			'API_KEY' : '', 
-			'SECRET_KEY' : ''
-		}
+    'ocr' :
+        { 
+            'is_ocr': True,
+            'newline': True,
+            'mode': 'text'
+        },
+    'alert':
+        {
+            'is_alert': True,
+            'alert_time': 90
+        }
 }
 
 ALPHADIG = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'

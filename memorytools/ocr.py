@@ -10,15 +10,31 @@ from utils import *
 class OCR(object):
     def __init__(self, root):
         self.root = root
-        self.is_pause = False
+        self.is_ocr = True
         self.newline = True
         self.mode = 'text'
         self.textocr = BaiduOCR(BAIDU_ACCOUNTS)
         self.formulaocr = LatexOCR(XUEERSI_ACCOUNTS)
 
+    def setConfig(self, config):
+        if 'is_ocr' in config:
+            self.is_ocr = config['is_ocr']
+        if 'newline' in config:
+            self.newline = config['newline']
+        if 'mode' in config:
+            self.mode = config['mode']
+
+    def getConfig(self):
+        config = {
+            'is_ocr': self.is_ocr,
+            'newline': self.newline,
+            'mode': self.mode
+        }
+        return config
+
     def createMenu(self):
         menu_options =  (
-                            ("开启OCR", isCheckIcon(not self.is_pause), self.pauseOcr),
+                            ("开启OCR", isCheckIcon(self.is_ocr), self.pauseOcr),
                             ('去除换行', isCheckIcon(not self.newline), self.turnNewline),
                             ('识别文本', isPickIcon(self.mode=='text'), self.textMode),
                             ('识别公式', isPickIcon(self.mode=='formula'), self.formulaMode),
@@ -27,7 +43,7 @@ class OCR(object):
         return menu_options
 
     def pauseOcr(self, sysTrayIcon):
-        self.is_pause = not self.is_pause
+        self.is_ocr = not self.is_ocr
         self.root.refreshMenu()
 
     def textMode(self, sysTrayIcon):
@@ -71,7 +87,7 @@ class OCR(object):
     #         self.textocr = BaiduOCR([ocr, ])
 
     def start(self):
-        if self.is_pause:
+        if not self.is_ocr:
             return
         im = ImageGrab.grabclipboard()          # 获取剪切板
 

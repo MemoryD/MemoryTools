@@ -118,6 +118,19 @@ class ImageBox(BaseBox):
         text.pack(side='top', padx=10, fill='y')
         self.start()
 
+class LabelBox(BaseBox):
+    """docstring for LabelBox"""
+    def __init__(self, title='MemoryBox'):
+        super(LabelBox, self).__init__([], title)
+    
+    def show(self, text, button=None):
+        self.minsize(self.screen_w//3, self.screen_h//5)
+        label = Label(self, text=text,  font=("微软雅黑", 12))
+        label.pack(padx=10, pady=50)
+        if button:
+            self.cancel_bth.config(text=button)
+        self.start()
+
 class ImageTextBox(BaseBox):
     '''用来显示一张图片和一个文本框，会根据图片的大小和比例调整排列的方式'''
     def __init__(self, title='MemoryBox'):
@@ -167,3 +180,6 @@ class ImageTextBox(BaseBox):
             self.textbox.pack(side='right', padx=10, pady=10, fill='both')
 
         self.start()
+
+if __name__ == '__main__':
+    LabelBox().show("虽然你关掉了休息提醒，但还是要注意身体！", '确认')

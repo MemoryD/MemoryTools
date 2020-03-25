@@ -1,1 +1,1 @@
-{"ocr": {"APP_ID": "18054283", "API_KEY": "UnwUzcDzzMcR6smt5xm9vIwi", "SECRET_KEY": "755vO7iZGV0DDIlzH7DHpkWjGDOBZzav"}}
+{"alert": {"is_alert": true, "alert_time": 60}, "copytrans": {"is_trans": true, "newline": false, "strict": false, "mode": "both", "src": "en", "dest": "zh-cn"}, "ocr": {"is_ocr": false, "newline": true, "mode": "text"}}
