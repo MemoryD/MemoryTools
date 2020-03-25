@@ -1,23 +1,13 @@
-import time
-import hashlib
-import requests
-import random
-from PIL import Image, ImageDraw
+from time import sleep, time
+from random import randint, choice
+from PIL import Image
+from hashlib import sha1
 from base64 import b64encode
 from urllib.parse import quote
+from requests import post
 from requests.exceptions import ConnectionError
 from utils import *
 from setting import *
-
-ALPHADIG = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-
-def img2base64(image):
-    with open(image, 'rb') as bin_data:
-        image_data = bin_data.read()
-        image_data_base64 = base64.b64encode(image_data)
-        image_data_base64 = quote(image_data_base64)
-        return image_data_base64
-
 
 class XueersiOCR(object):
     '''
@@ -35,7 +25,7 @@ class XueersiOCR(object):
         '''
         params = {
             'app_key'    : self.app_key,
-            'time_stamp' : str(int(time.time())),
+            'time_stamp' : str(int(time())),
             'nonce_str'  : self.getNonceStr(),
         }
         params['sign'] = self.getReqSign(params, self.app_secret)
@@ -49,12 +39,12 @@ class XueersiOCR(object):
             'cache-control': "no-cache",
         }
 
-        start = time.time()
-        r = requests.post(self.url, data=payload, headers=headers)
-        self.start_time = (start + time.time()) / 2
+        start = time()
+        r = post(self.url, data=payload, headers=headers)
+        self.start_time = (start + time()) / 2
 
         res = r.json()
-        # print(res)
+
         return res
 
     @classmethod
@@ -78,7 +68,7 @@ class XueersiOCR(object):
         for key in sorted(params):
             sign += params[key]
         sign += app_secret
-        sign = hashlib.sha1(sign.encode('utf-8'))
+        sign = sha1(sign.encode('utf-8'))
         return sign.hexdigest()
 
     @classmethod
@@ -87,13 +77,13 @@ class XueersiOCR(object):
         返回一个长度为1~32的随机字符串。
         '''
         ns = ''
-        for i in range(random.randint(1, 32)):
-            ns += random.choice(ALPHADIG)
+        for i in range(randint(1, 32)):
+            ns += choice(ALPHADIG)
         return ns
 
 
-class MemoryOCR(object):
-    """docstring for MemoryOCR"""
+class LatexOCR(object):
+    """docstring for LatexOCR"""
     def __init__(self, accounts: list):
         # self.accounts = accounts
         self.interval = 10
@@ -102,58 +92,39 @@ class MemoryOCR(object):
         for acco in accounts:
             self.ocrs.append(XueersiOCR(acco['app_key'], acco['app_secret']))
 
-    def ocr(self, image: str, img_type='base64'):
-        if isinstance(image, Image.Image):
-            image = quote(b64encode(pil2bytes(image)))
-
+    def get_api(self):
         xueersi = self.ocrs[self.index]
-        time_pass = time.time() - xueersi.start_time
+        
+        time_pass = time() - xueersi.start_time
         if time_pass < self.interval:
-            time.sleep(self.interval - time_pass + 0.1)
+            sleep(self.interval - time_pass + 0.1)
 
         self.index = (self.index + 1) % len(self.ocrs)
+        return xueersi
+
+    def ocr(self, image, img_type='base64'):
+        xueersi = self.get_api()
+
         res = xueersi.ocr(image, img_type)
+        pos = []
         code = res['code']
         if code != 0:
             if code in ERROR_CODES:
-                return ([], ERROR_CODES[code]['reason'])
+                return (pos, ERROR_CODES[code]['reason'])
             else:
-                return ([], "由于未知错误，识别失败！")
+                return (pos, "由于未知错误，识别失败！")
+
         if not res['data'] or 'content' not in res['data']:
-            return ([], "由于未知错误，识别失败！")
+            return (pos, "由于未知错误，识别失败！")
 
         content = res['data']['content']
         content = '\n\n'.join(content)
         pos = res['data']['recognition']['textLinePosition']
+
         return (pos, content)
-        
 
-def getRect(x1, y1, x2, y2):
-    return [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]
+    def latex(self, pilimg, img_type='base64'):
+        if isinstance(pilimg, Image.Image):
+            image = quote(b64encode(pil2bytes(pilimg)))
 
-if __name__ == '__main__':
-    mocr = MemoryOCR(XUEERSI_ACCOUNTS)
-    for i in range(1, 7):
-        image_path = '.\\src\\new_new_test%s.png' % i
-        # xueersi = XueersiOCR(XUEERSI_ACCOUNTS[0]['app_key'], XUEERSI_ACCOUNTS[0]['app_secret'])
-        img = img2base64(image_path)
-        rects = mocr.ocr(img)['data']['recognition']['textLinePosition']
-        image = Image.open(image_path)
-        draw = ImageDraw.Draw(image)
-        for rect in rects:
-            draw.polygon(getRect(*rect), outline=(255,0,0))
-        image.save(image_path.replace('test', 'reg'), 'png')
-        # time.sleep(11)
-        
-        # image = Image.open(image_path)
-        # w, h = image.size
-        # image = image.resize((int(w*0.7), h))
-        # image.save(image_path.replace('test', 'new_test'), 'png')
-
-    # mocr = MemoryOCR(XUEERSI_ACCOUNTS)
-    # for _ in range(5):
-    #     for i in range(1, 5):
-    #         img = img2base64('test'+str(i)+'.png')
-    #         res = mocr.ocr(img)
-    #         print(res)
-
+        return self.ocr(image, img_type)

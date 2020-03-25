@@ -1,9 +1,8 @@
 import pyperclip as p
-import easygui as g
 from PIL import Image, ImageGrab, ImageDraw
 from baiduOCR import BaiduOCR
-from xueersiOCR import MemoryOCR
-from imagetext import ImageText
+from xueersiOCR import LatexOCR
+from boxes import ImageTextBox
 from setting import *
 from utils import *
 
@@ -14,36 +13,34 @@ class OCR(object):
         self.is_pause = False
         self.newline = True
         self.mode = 'text'
-        # config = read_config()
-        # ocr = config['ocr']
         self.textocr = BaiduOCR(BAIDU_ACCOUNTS)
-        self.formulaocr = MemoryOCR(XUEERSI_ACCOUNTS)
+        self.formulaocr = LatexOCR(XUEERSI_ACCOUNTS)
 
-    def pause_ocr(self, sysTrayIcon):
+    def pauseOcr(self, sysTrayIcon):
         self.is_pause = not self.is_pause
-        self.root.create_menu()
-        sysTrayIcon.refresh_menu(self.root.menu_options)
+        self.root.createMenu()
+        sysTrayIcon.refreshMenu(self.root.menu_options)
 
-    def turn_mode(self, sysTrayIcon):
+    def turnMode(self, sysTrayIcon):
         if self.mode == 'text':
             self.mode = 'formula'
         else:
             self.mode = 'text'
-        self.root.create_menu()
-        sysTrayIcon.refresh_menu(self.root.menu_options)
+        self.root.createMenu()
+        sysTrayIcon.refreshMenu(self.root.menu_options)
 
-    def turn_newline(self, sysTrayIcon):
+    def turnNewline(self, sysTrayIcon):
         self.newline = not self.newline
-        self.root.create_menu()
-        sysTrayIcon.refresh_menu(self.root.menu_options)
+        self.root.createMenu()
+        sysTrayIcon.refreshMenu(self.root.menu_options)
 
-    def pause_text(self):
+    def pauseText(self):
         return "开启OCR" if self.is_pause else "暂停OCR"
 
-    def mode_text(self):
+    def modeText(self):
         return "识别：文本" if self.mode == 'text' else "识别：公式"
 
-    def newline_text(self):
+    def newlineText(self):
         return "换行：是" if self.newline else "换行：否"
 
     # def setting(self, sysTrayIcon):
@@ -84,7 +81,7 @@ class OCR(object):
                 if self.mode == 'text':
                     text = self.textocr.ocr(im, self.newline)
                 elif self.mode == 'formula':
-                    pos, text = self.formulaocr.ocr(im)
+                    pos, text = self.formulaocr.latex(im)
                     print("位置：", pos)
                     draw = ImageDraw.Draw(im)
                     color = Color()
@@ -94,7 +91,7 @@ class OCR(object):
                 text = str(e)
 
             p.copy('')
-            ImageText(im, text)
+            ImageTextBox('OCR识别结果').show(im, text)
 
 
 if __name__ == '__main__':

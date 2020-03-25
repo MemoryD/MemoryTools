@@ -1,7 +1,6 @@
 import os
 import re
 import json
-import time
 from base64 import b64decode
 from io import BytesIO
 from setting import *
@@ -16,7 +15,7 @@ class Color(object):
         self.index = (self.index + 1) % (len(self.colors))
         return color
 
-def non_string_iterable(obj):
+def nonStringIterable(obj):
     try:
         iter(obj)
     except TypeError:
@@ -24,39 +23,48 @@ def non_string_iterable(obj):
     else:
         return not isinstance(obj, str)
 
+def getTextLine(text):
+    return len(text.split('\n'))
+
 def getRect(x1, y1, x2, y2):
     return [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]
 
-def get_pic(pic_code, pic_name):
+def getPic(pic_code, pic_name):
     with open(pic_name, 'wb') as image:
         image.write(b64decode(pic_code))
 
+def img2base64(image):
+    with open(image, 'rb') as bin_data:
+        image_data = bin_data.read()
+        image_data_base64 = base64.b64encode(image_data)
+        image_data_base64 = quote(image_data_base64)
+        return image_data_base64
 
-def read_config(name=CONFIG):
+def readConfig(name=CONFIG):
     # if name == CONFIG and not os.path.exists(name):
-    #     reset_config()
+    #     resetConfig()
 
     with open(name, "r") as f:
         data = f.read()
         return json.loads(data)
 
-def write_config(data, name=CONFIG):
+def writeConfig(data, name=CONFIG):
     data = json.dumps(data)
     with open(name, "w") as f:
         f.write(data)
 
-def reset_config(name=CONFIG):
-    write_config(DEFAULT_CONFIG, name)
+def resetConfig(name=CONFIG):
+    writeConfig(DEFAULT_CONFIG, name)
 
-def filter_str(sentence):
+def filterStr(sentence):
     sentence = re.sub(NOTAS, '', sentence)
     sentence = sentence.translate(REMOVE_PUNCTUATION_MAP)
     sentence = re.sub('[0-9]', '', sentence).strip()
     return sentence
 
-def judge_language(s):
+def judgeLanguage(s):
     # s = unicode(s)   # python2需要将字符串转换为unicode编码，python3不需要
-    s = filter_str(s)
+    s = filterStr(s)
     re_words = re.compile(u"[a-zA-Z]")
     res = re.findall(re_words, s)  # 查询出所有的匹配字符串
     res2 = re.sub('[a-zA-Z]', '', s).strip()
