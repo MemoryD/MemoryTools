@@ -1,112 +1,39 @@
-# MemoryTools
- python写的小工具合集
+## Memory Tools V1.5.5
 
-常见错误：
+> 2020/3/25 更新
 
-```
-requests.exceptions.ConnectionError: ('Connection aborted.', TimeoutError(10060, '由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。', None, 10060, None))
-```
+---
 
-$$
-\frac{du_{i}}{dt})= \sum _{j}T_{ij}v_{i}- \frac{u_{i}}{R_{i}}+I_{i}
-$$
+#### 软件功能
 
-$$
-=- \left[ \frac{1}{3} \frac{0}{1} \frac{1}{1} \right] ,B=- \left[ \frac{1}{1}^{1} \frac{0}{1}, \frac{1}{1} \right]  A
-$$
+- **复制翻译**：翻译剪切板的文本，并弹框显示结果。
+    - **中文-->英文**：中文翻译成英文，如果复制的文本英文的比例过高，则不会翻译。
+    - **英文-->中文**：英文翻译成中文，如果复制的文本中文的比例过高，则不会翻译。
+    - **英文 <-> 中文**：中英互译，检测复制的文本是哪种语言，然后翻译成另一种语言。
+    - **去除换行**：如果是从pdf上复制，则每一行末尾都会加入换行，结果就不准确，开启去除换行可以避免。
+    - **严格模式**：默认使用语言自动检测，如果开启严格模式，则将设置源语言。（可以在谷歌翻译上试一下，在中英文混排时可能有一点差异）
 
-$$
- \frac{dE}{dt}= \sum _{i} \frac{ \partial E}{ \partial v_{i}} \frac{dv_{i}}{dt}= \sum _{i}( \sum _{i}T_{ij} \nu _{j}- \frac{u_{i}}{R_{i}}+I_{i}) 
-$$
+- **OCR识别**：对剪切板中的图片进行OCR识别，并弹框显示。
+    - **识别：文本**：识别普通的文本。
+    - **识别：公式**：可以识别公式，并转换成 Latex 代码。（准确率emmm...）
+    - **去除换行**：是否去除识别后文本中的换行。识别公式时，此项不起作用。
 
-$$
- \frac{dE}{dt}=- \sum _{i} \frac{dv_{i}}{dt}( \sum _{j}T_{ij} \nu _{j}- \frac{u_{i}}{R_{i}}+I_{i} 
-$$
+- **休息提醒**：在你工作一段时间以后，提醒你该休息了。
+    - **更改时间**：提醒时间默认90分钟，可以自己更改。
 
-$$
-C_i( \frac{du_{t}}{dt})= \sum _{J}T_{j}v_{j}- \frac{u_{1}}{R_{1}}+
-$$
+---
 
-$$
- \frac{dE}{dt}=- \sum C_{i}( \frac{dv_{i}}{dt})( \frac{du_{i}}{dt}) 
-$$
+#### 软件说明
 
-$$
- A=- \left[ \frac{1}{3} \frac{0}{1}- \frac{1}{1} \right] ,B=- \left[ \frac{1}{1} \right] ^{ \frac{1}{2}}- \frac{1}{1} 
-$$
+1. 复制翻译使用谷歌翻译的接口。
+2. 如果翻译后的结果与未翻译时一样，则不会显示。
+3. OCR使用百度AI开放平台的接口，每天有一定的次数限制。
+4. 当OCR设置为识别公式时，仍然可以识别文本，但是可能会发生意料之外的错误。
+5. 请按时休息 :smile:。
 
-$$
- \frac{du}{dt}=Au-b 
-$$
+---
 
-$$
- C_{1}( \frac{du_{i}}{dt})= \sum _{j}T_{i}v_{j}- \frac{u_{1}}{R_{1}}+I_{1} 
-$$
+#### 关于作者
 
-$$
- ( \frac{du_{i}}{dt})= \sum _{J}T_{ij}v_{j}- \frac{u_{i}}{R_{j}} 
-$$
-
-$$
--ΣI,(t) í=1 j≠i í=1 
- E \left[ \nu (t) \right] =- \frac{1}{2} \sum _{i=1}^{n} \sum _{j \neq i}w_{ij}v_{i}(t) \nu _{j}(t) n 
-$$
-
-$$
-i=1   E \left[ \nu (t) \right] =- \frac{1}{2} \sum _{i=1}^{n} \sum _{j \neq i}w_{ij}v_{i}(t)v_{j}(t)- ΣI,,(1)  n  
-$$
-
-$$
-E[v(t)]=-\frac{1}{2} \sum_{i=1}^{n} \sum_{j \neq i} w_{i j} v_{i}(t) v_{j}(t)-\sum_{i=1}^{n} I_{i} v_{i}(t)
-$$
-
-$$
-E(v)=-\frac{1}{2} \sum_{i} \sum_{j} T_{i j} v_{i} v_{j}+\sum_{i} \frac{1}{R_{i}} \int_{0}^{v_{i}} \Psi^{-1}(v) d v-\sum_{i} I_{i} v_{i}
-$$
-
-$$
- E(v)=- \frac{1}{2} \sum _{i} \sum _{j}T_{ij} \nu _{i} \nu _{j}+ \sum _{i} \frac{1}{R_{i}} \int _{0}^{v_{i}} \varphi ^{-1}(v)dv- \sum _{i}I_{i}v_{i} 
-$$
-
-$$
- E( \nu )=- \frac{1}{2} \sum _{i} \sum _{j}T_{ij}v_{i} \nu _{j}+ \sum _{i} \frac{1}{R_{i}} \int _{i}^{v_{i}} \Phi ^{-1}( \nu )dv- \sum _{i}I_{i}v_{i} 
-$$
-
-$$
- \sum _{i=1}^{n} \sum _{i=1}^{n}(t)  =- \frac{1}{2} \sum _{i=1}^{n} \sum _{j \neq i}w_{ij}v_{i}(t) \nu _{j}(t)- \sum _{i=1}^{n} 
-$$
-
-$$
- E \left[ \nu (t) \right] =- \frac{1}{2} \sum _{i=1}^{n} \sum _{j=t}w_{ij} \nu _{i}(t) \nu _{j}(t)- \sum _{i=1}^{n}I_{i}v_{i}(t) 
-$$
-
-$$
- \left[ \nu (t+1) \right] -E \left[ \nu (t) \right] =- \left[ v_{k}(t+1)-v_{k}(t) \right] \left[ \sum _{i=1}u_{ik} \nu _{i}(t)+I_{k} \right] 
-$$
-
-$$
- u_{i}(t+1)= \sum _{i} \nu _{ij} t)+I_，
-$$
-
-$$
-\frac{dE}{dt}= \frac{1}{2} \sum _{i=1}^{n} \sum _{j=1}^{n} \frac{d}{dt}(w_{ij}v_{i} \nu _{j})=  \frac{1}{2} \sum _{i=1}^{n} \sum _{j=1}^{n} \left[ (v_{i} \nu _{j}) \frac{d}{dt}w_{ij}+w_{ij} \frac{d}{dt}(v_{i} \nu _{j}) \right] 
-$$
-
-$$
-c,
- \frac{du_{i}}{dt}=- \frac{u_{i}}{R_{i}}+ \sum _{j=1}^{n} \frac{W(u_{j})}{R_{ij}}+I 
-$$
-
-$$
-i 
- \frac{du_{i}}{dt}=- \frac{u_{i}}{R_{i}}+ \sum _{j=1}^{n} \frac{ \varphi (u_{j})}{R_{ij}}+I_{i} 
-$$
-
-$$
- ( \frac{du_{i}}{dt})= \sum _{j}T_{ij}v_{i}- \frac{u_{i}}{R_{i}}+I_{i} 
-$$
-
-$$
-c_{i}( \frac{du_{t}}{dt})= \sum _{j}T_{v} \nu _{t}- \frac{u_{1}}{R_{t}}+I_{1}
-$$
-
+1. 作者：Memory
+2. 邮箱：memory_d@foxmail.com
