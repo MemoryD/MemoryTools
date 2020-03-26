@@ -1,18 +1,27 @@
 from aip import AipOcr
 from PIL import Image
 from utils import pil2bytes
-from setting import *
+from setting import BAIDU_ERROR_CODES
+
 
 class BaiduOCR(object):
-    """docstring for BaiduOCR"""
-    def __init__(self, accounts: dict):
+    """
+    因为免费调用API的次数以及频率有限，因此利用百度官方提供的API构建
+    一个多账号的OCR识别的类，可以提升程序处理的能力。
+    传入一个账号的列表，可以根据额度自动切换识别的模式。
+
+    accounts: 百度AI平台的账号列表
+    accounts = [{'APP_ID': '...', 'APP_KEY': '...', 'SECRET_KEY': '...'}, {...}, ...]
+    """
+    def __init__(self, accounts: list):
         self.index = 0
         self.ocrs = []
         self.mode = 'basicAccurate'
         for acco in accounts:
             self.ocrs.append(AipOcr(acco['APP_ID'], acco['APP_KEY'], acco['SECRET_KEY']))
 
-    def ocr(self, image, newline=True):
+    def ocr(self, image: Image, newline=True) -> str:
+        '''OCR识别的主函数，传入一个PIL.Image对象，返回识别的文本。'''
         if self.mode == 'None':
             return '当天配额已用完，请更换API或明天再试！'
 
@@ -53,6 +62,3 @@ class BaiduOCR(object):
             res = ''.join(res)
 
         return res
-
-
-        

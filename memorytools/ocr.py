@@ -3,8 +3,8 @@ from PIL import Image, ImageGrab, ImageDraw
 from baiduOCR import BaiduOCR
 from xueersiOCR import LatexOCR
 from boxes import ImageTextBox
-from setting import *
-from utils import *
+from setting import BAIDU_ACCOUNTS, XUEERSI_ACCOUNTS
+from utils import isCheckIcon, isPickIcon, getRect, Color
 
 
 class OCR(object):
@@ -16,7 +16,7 @@ class OCR(object):
         self.textocr = BaiduOCR(BAIDU_ACCOUNTS)
         self.formulaocr = LatexOCR(XUEERSI_ACCOUNTS)
 
-    def setConfig(self, config):
+    def setConfig(self, config: dict):
         if 'is_ocr' in config:
             self.is_ocr = config['is_ocr']
         if 'newline' in config:
@@ -24,7 +24,7 @@ class OCR(object):
         if 'mode' in config:
             self.mode = config['mode']
 
-    def getConfig(self):
+    def getConfig(self) -> dict:
         config = {
             'is_ocr': self.is_ocr,
             'newline': self.newline,
@@ -32,12 +32,12 @@ class OCR(object):
         }
         return config
 
-    def createMenu(self):
-        menu_options =  (
-                            ("开启OCR", isCheckIcon(self.is_ocr), self.pauseOcr),
-                            ('去除换行', isCheckIcon(not self.newline), self.turnNewline),
-                            ('识别文本', isPickIcon(self.mode=='text'), self.textMode),
-                            ('识别公式', isPickIcon(self.mode=='formula'), self.formulaMode),
+    def createMenu(self) -> tuple:
+        menu_options = (
+                        ("开启OCR", isCheckIcon(self.is_ocr), self.pauseOcr, True),
+                        ('去除换行', isCheckIcon(not self.newline), self.turnNewline, True),
+                        ('识别文本', isPickIcon(self.mode=='text'), self.textMode, False),
+                        ('识别公式', isPickIcon(self.mode=='formula'), self.formulaMode, False),
                         )
 
         return menu_options
@@ -79,34 +79,6 @@ class OCR(object):
 
             p.copy('')
             ImageTextBox('OCR识别结果').show(im, text)
-
-    # def setting(self, sysTrayIcon):
-    #     msg = "需要设置百度AI平台(https://ai.baidu.com/)的API才能进行OCR识别"
-    #     title = "设置百度API"
-    #     fieldNames = ["*APP_ID","*API_KEY","*SECRET_KEY"]
-    #     fieldValues = []
-    #     fieldValues = g.multenterbox(msg, title, fieldNames)
-    #     while True:
-    #         if fieldValues == None:
-    #             break
-    #         errmsg = ""
-    #         for i in range(len(fieldNames)):
-    #             option = fieldNames[i].strip()
-    #             if fieldValues[i].strip() == "" and option[0] == "*":
-    #                 errmsg += ("【%s】为必填项   " %fieldNames[i])
-    #         if errmsg == "":
-    #             break
-    #         fieldValues = g.multenterbox(errmsg, title, fieldNames, fieldValues)
-        
-    #     if fieldValues:
-    #         config = read_config()
-    #         ocr = config['ocr']
-    #         ocr['APP_ID'] = fieldValues[0]
-    #         ocr['APP_KEY'] = fieldValues[1]
-    #         ocr['SECRET_KEY'] = fieldValues[2]
-    #         config['ocr'] = ocr
-    #         write_config(config)
-    #         self.textocr = BaiduOCR([ocr, ])
 
 
 if __name__ == '__main__':

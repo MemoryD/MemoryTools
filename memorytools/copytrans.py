@@ -1,7 +1,7 @@
 import pyperclip as p
 from boxes import TextTextBox
 from googletransx import Translator
-from utils import *
+from utils import isCheckIcon, isPickIcon, judgeLanguage
 
 
 class CopyTrans(object):
@@ -16,7 +16,7 @@ class CopyTrans(object):
         self.last = ''                                                  # 记录上次的剪切板内容
         self.translator = Translator(service_urls=['translate.google.cn'])   # 获得翻译接口
 
-    def setConfig(self, config):
+    def setConfig(self, config: dict):
         if 'is_trans' in config:
             self.is_trans = config['is_trans']
         if 'newline' in config:
@@ -30,7 +30,7 @@ class CopyTrans(object):
         if 'dest' in config:
             self.dest = config['dest']
 
-    def getConfig(self):
+    def getConfig(self) -> dict:
         config = {
             'is_trans': self.is_trans,
             'newline': self.newline,
@@ -41,14 +41,14 @@ class CopyTrans(object):
         }
         return config
 
-    def createMenu(self):
-        menu_options =  (
-                            ("开启翻译", isCheckIcon(self.is_trans), self.pauseTrans),
-                            ('去除换行', isCheckIcon(not self.newline), self.turnNewline),
-                            ('严格模式', isCheckIcon(self.strict), self.turnStrict),
-                            ('英文 <-> 中文', isPickIcon(self.mode=='both'), self.bothMode),
-                            ('英文 --> 中文', isPickIcon(self.mode=='en2zh'), self.en2zhMode),
-                            ('中文 --> 英文', isPickIcon(self.mode=='zh2en'), self.zh2enMode),
+    def createMenu(self) -> tuple:
+        menu_options = (
+                        ("开启翻译", isCheckIcon(self.is_trans), self.pauseTrans, True),
+                        ('去除换行', isCheckIcon(not self.newline), self.turnNewline, True),
+                        ('严格模式', isCheckIcon(self.strict), self.turnStrict, True),
+                        ('英文 <-> 中文', isPickIcon(self.mode=='both'), self.bothMode, False),
+                        ('英文 --> 中文', isPickIcon(self.mode=='en2zh'), self.en2zhMode, False),
+                        ('中文 --> 英文', isPickIcon(self.mode=='zh2en'), self.zh2enMode, False),
                         )
 
         return menu_options
@@ -79,7 +79,7 @@ class CopyTrans(object):
         self.newline = not self.newline
         self.root.refreshMenu()
 
-    def trans(self, translator, source):
+    def trans(self, translator: Translator, source: str):
         if source == "" or source == self.last:                         # 是否为空或者跟上次一样
             return None
 

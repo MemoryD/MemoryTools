@@ -1,1 +1,1 @@
-{"alert": {"is_alert": true, "alert_time": 60}, "copytrans": {"is_trans": true, "newline": true, "strict": false, "mode": "both", "src": "en", "dest": "zh-cn"}, "ocr": {"is_ocr": true, "newline": true, "mode": "formula"}}
+{"alert": {"is_alert": true, "alert_time": 60}, "copytrans": {"is_trans": true, "newline": false, "strict": false, "mode": "both", "src": "zh-cn", "dest": "en"}, "ocr": {"is_ocr": true, "newline": false, "mode": "formula"}}

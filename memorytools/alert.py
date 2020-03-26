@@ -1,7 +1,8 @@
 from time import time
 from boxes import LabelBox
-from setting import *
-from utils import *
+from setting import ALERT_MSG
+from utils import isCheckIcon, isPickIcon
+
 
 class Alert(object):
     def __init__(self, root, wt=90):
@@ -10,13 +11,13 @@ class Alert(object):
         self.is_alert = True
         self.start_time = time()
 
-    def setConfig(self, config):
+    def setConfig(self, config: dict):
         if 'is_alert' in config:
             self.is_alert = config['is_alert']
         if 'alert_time' in config:
             self.alert_time = config['alert_time']
 
-    def getConfig(self):
+    def getConfig(self) -> dict:
         config = {
             'is_alert': self.is_alert,
             'alert_time': self.alert_time
@@ -24,12 +25,12 @@ class Alert(object):
         return config
 
     def createMenu(self):
-        menu_options =  (
-                            ("开启提醒", isCheckIcon(self.is_alert), self.pauseAlert),
-                            ('30分钟', isPickIcon(self.alert_time == 30), self.changeTime30),
-                            ('60分钟', isPickIcon(self.alert_time == 60), self.changeTime60),
-                            ('90分钟', isPickIcon(self.alert_time == 90), self.changeTime90),
-                            ('120分钟', isPickIcon(self.alert_time == 120), self.changeTime120),
+        menu_options = (
+                        ("开启提醒", isCheckIcon(self.is_alert), self.pauseAlert, True),
+                        ('30分钟', isPickIcon(self.alert_time == 30), self.changeTime30, False),
+                        ('60分钟', isPickIcon(self.alert_time == 60), self.changeTime60, False),
+                        ('90分钟', isPickIcon(self.alert_time == 90), self.changeTime90, False),
+                        ('120分钟', isPickIcon(self.alert_time == 120), self.changeTime120, False),
                         )
 
         return menu_options
@@ -54,7 +55,7 @@ class Alert(object):
     def changeTime30(self, sysTrayIcon):
         self.alert_time = 30
         self.root.refreshMenu()
-    
+
     def changeTime60(self, sysTrayIcon):
         self.alert_time = 60
         self.root.refreshMenu()
@@ -62,13 +63,13 @@ class Alert(object):
     def changeTime90(self, sysTrayIcon):
         self.alert_time = 90
         self.root.refreshMenu()
-    
+
     def changeTime120(self, sysTrayIcon):
         self.alert_time = 120
         self.root.refreshMenu()
 
     def start(self):
-        if self.is_alert and self.alert():                          # 是否到达预设的提醒时间
+        if self.is_alert and self.alert():
             alert_message = "你已经连续工作 %d 分钟了！是时候休息一下了！\n%s" % (self.alert_time, ALERT_MSG)
             LabelBox('危险警报').show(alert_message, '等你想要继续工作了再点我')
             self.start_time = time()

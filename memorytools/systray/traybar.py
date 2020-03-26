@@ -2,15 +2,24 @@ import os
 from .win32_adapter import *
 import threading
 import uuid
+# from win32con import MIIM_TYPE
+# print(MIIM_TYPE)
+
 class SysTrayIcon(object):
     """
-    menu_options: tuple of tuples (menu text, menu icon path or None, function name)
+    icon: 托盘图标的路径，unicode编码，最长128
+    hover_text: 鼠标悬浮在托盘图标上时的显示的文本
+    menu_options: (text, icon, function, separator)
+                    text: 菜单项的文本，unicode编码，最长128
+                    icon: 菜单项的图标
+                    fuction: 按下该项调用的函数，或者此项可以换成同样的元组以创造二级菜单
+                    separator: 菜单项下面是否加一条分隔线
+    on_quit: 按下"退出"菜单项时调用的函数
+    default_menu_index: 
+    window_class_name: 
+    exit_ico: "退出"菜单项的图标
 
-    menu text and tray hover text should be Unicode
-    hover_text length is limited to 128; longer text will be truncated
-
-    Can be used as context manager to enable automatic termination of tray
-    if parent thread is closed:
+    可以用作上下文管理器，以在关闭父线程时启用托盘的自动终止:
 
         with SysTrayIcon(icon, hover_text) as systray:
             for item in ['item1', 'item2', 'item3']:
@@ -30,7 +39,8 @@ class SysTrayIcon(object):
                  on_quit=None,
                  default_menu_index=None,
                  window_class_name=None,
-                 exit_ico=None):
+                 exit_ico=None
+                 ):
 
         self._icon = icon
         self._icon_shared = False
@@ -66,7 +76,8 @@ class SysTrayIcon(object):
         self._register_class()
 
     def refreshMenu(self, menu_options):
-        menu_options = menu_options + (('退出', self.exit_ico, self.QUIT),)
+        '''留了一个外部刷新菜单的函数，可以动态改变菜单'''
+        menu_options = menu_options + (('退出', self.exit_ico, self.QUIT, False),)
         self._next_action_id = self.FIRST_ID
         self._menu_actions_by_id = set()
         self._menu_options = self._add_ids_to_menu_options(list(menu_options))
@@ -144,7 +155,7 @@ class SysTrayIcon(object):
     def _add_ids_to_menu_options(self, menu_options):
         result = []
         for menu_option in menu_options:
-            option_text, option_icon, option_action = menu_option
+            option_text, option_icon, option_action, option_separator = menu_option
             if callable(option_action) or option_action in SysTrayIcon.SPECIAL_ACTIONS:
                 self._menu_actions_by_id.add((self._next_action_id, option_action))
                 result.append(menu_option + (self._next_action_id,))
@@ -152,6 +163,7 @@ class SysTrayIcon(object):
                 result.append((option_text,
                                option_icon,
                                self._add_ids_to_menu_options(option_action),
+                               option_separator,
                                self._next_action_id))
             else:
                 raise Exception('Unknown item', option_text, option_icon, option_action)
@@ -242,15 +254,17 @@ class SysTrayIcon(object):
         PostMessage(self._hwnd, WM_NULL, 0, 0)
 
     def _create_menu(self, menu, menu_options):
-        for option_text, option_icon, option_action, option_id in menu_options[::-1]:
+        for option_text, option_icon, option_action, option_separator, option_id in menu_options[::-1]:
+            if option_separator:
+                self._insert_separator(menu)
             if option_icon:
                 option_icon = self._prep_menu_icon(option_icon)
-
             if option_id in self._menu_actions_by_id:
                 item = PackMENUITEMINFO(text=option_text,
                                         hbmpItem=option_icon,
                                         wID=option_id)
                 InsertMenuItem(menu, 0, 1, ctypes.byref(item))
+                # self._insert_separator(menu)
             else:
                 submenu = CreatePopupMenu()
                 self._create_menu(submenu, option_action)
@@ -258,6 +272,11 @@ class SysTrayIcon(object):
                                         hbmpItem=option_icon,
                                         hSubMenu=submenu)
                 InsertMenuItem(menu, 0, 1,  ctypes.byref(item))
+
+    def _insert_separator(sekf, menu):
+        '''插入一条分隔线'''
+        item = PackMENUITEMINFO(fType=MF_SEPARATOR)
+        InsertMenuItem(menu, 0, 1,  ctypes.byref(item))
 
     def _prep_menu_icon(self, icon):
         icon = encode_for_locale(icon)
