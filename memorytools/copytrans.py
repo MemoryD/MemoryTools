@@ -1,6 +1,3 @@
-#!python3
-# -*- coding:utf-8 -*-
-
 import pyperclip as p
 from boxes import TextTextBox
 from googletransx import Translator
@@ -115,7 +112,7 @@ class CopyTrans(object):
             self.last = source
             print('译文与原文一致，因此不显示。')
             return None
-        print("%s\n%s\n" % (sentence, text))                            # 打印到命令行
+        # print("%s\n%s\n" % (sentence, text))                            # 打印到命令行
         TextTextBox('翻译结果').show(sentence, text)
         self.last = p.paste()
 

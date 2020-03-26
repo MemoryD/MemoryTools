@@ -116,6 +116,7 @@ class ImageBox(BaseBox):
         text = Text(self, height=100)
         text.image_create(END, image=image)
         text.pack(side='top', padx=10, fill='y')
+        self.cancel_bth.config(text='确定')
         self.start()
 
 class LabelBox(BaseBox):

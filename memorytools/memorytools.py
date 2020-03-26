@@ -11,11 +11,11 @@ from utils import *
 from setting import *
 
 
-class Root(object):
+class MemoryTool(object):
+    '''程序的入口类'''
     def __init__(self):
         self.icon = getSrc('icon.ico')
         config = readConfig()
-        print(config)
         self.alert = Alert(self)
         self.ct = CopyTrans(self)
         self.ocr = OCR(self)
@@ -30,9 +30,11 @@ class Root(object):
         self.end = False
 
     def about(self, sysTrayIcon):
+        '''菜单中的 关于 选项，如果在线程中调用会出错，因此用一个变量控制，在主线程中显示信息'''
         self.is_about = True
         
     def createMenu(self):
+        '''创建托盘程序的菜单'''
         self.menu_options = (
                             ('复制翻译', getSrc('trans.ico'), self.ct.createMenu()),
                             ('OCR识别', getSrc('ocr.ico'), self.ocr.createMenu()),
@@ -42,9 +44,11 @@ class Root(object):
         return self.menu_options
 
     def refreshMenu(self):
+        '''创新菜单'''
         self.systray.refreshMenu(self.createMenu())
 
     def bye(self, sysTrayIcon):
+        '''退出程序时将配置写到文件中'''
         self.end = True
         config = {}
         config['alert'] = self.alert.getConfig()
@@ -54,6 +58,7 @@ class Root(object):
         print('bye')
 
     def run(self):
+        '''启动'''
         self.systray.start()
         while not self.end:
             sleep(0.1)
@@ -67,4 +72,4 @@ class Root(object):
 
 
 if __name__ == '__main__':
-    Root().run()
+    MemoryTool().run()

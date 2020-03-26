@@ -58,6 +58,28 @@ class OCR(object):
         self.newline = not self.newline
         self.root.refreshMenu()
 
+    def start(self):
+        if not self.is_ocr:
+            return
+        im = ImageGrab.grabclipboard()          # 获取剪切板
+
+        if isinstance(im, Image.Image):         # 判断是否是图片
+            try:
+                if self.mode == 'text':
+                    text = self.textocr.ocr(im, self.newline)
+                elif self.mode == 'formula':
+                    pos, text = self.formulaocr.latex(im)
+                    print("位置：", pos)
+                    draw = ImageDraw.Draw(im)
+                    color = Color()
+                    for rect in pos:
+                        draw.polygon(getRect(*rect), outline=color.next())
+            except Exception as e:
+                text = str(e)
+
+            p.copy('')
+            ImageTextBox('OCR识别结果').show(im, text)
+
     # def setting(self, sysTrayIcon):
     #     msg = "需要设置百度AI平台(https://ai.baidu.com/)的API才能进行OCR识别"
     #     title = "设置百度API"
@@ -85,28 +107,6 @@ class OCR(object):
     #         config['ocr'] = ocr
     #         write_config(config)
     #         self.textocr = BaiduOCR([ocr, ])
-
-    def start(self):
-        if not self.is_ocr:
-            return
-        im = ImageGrab.grabclipboard()          # 获取剪切板
-
-        if isinstance(im, Image.Image):         # 判断是否是图片
-            try:
-                if self.mode == 'text':
-                    text = self.textocr.ocr(im, self.newline)
-                elif self.mode == 'formula':
-                    pos, text = self.formulaocr.latex(im)
-                    print("位置：", pos)
-                    draw = ImageDraw.Draw(im)
-                    color = Color()
-                    for rect in pos:
-                        draw.polygon(getRect(*rect), outline=color.next())
-            except Exception as e:
-                text = str(e)
-
-            p.copy('')
-            ImageTextBox('OCR识别结果').show(im, text)
 
 
 if __name__ == '__main__':
