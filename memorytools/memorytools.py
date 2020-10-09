@@ -47,15 +47,18 @@ class MemoryTool(object):
     def refreshMenu(self):
         '''创新菜单'''
         self.systray.refreshMenu(self.createMenu())
+        self.refreshConfig()
 
-    def bye(self, sysTrayIcon: SysTrayIcon):
-        '''退出程序时将配置写到文件中'''
-        self.end = True
+    def refreshConfig(self):
         config = {}
         config['alert'] = self.alert.getConfig()
         config['copytrans'] = self.ct.getConfig()
         config['ocr'] = self.ocr.getConfig()
         writeConfig(config)
+
+    def bye(self, sysTrayIcon: SysTrayIcon):
+        '''退出程序时将配置写到文件中'''
+        self.end = True
         print('bye')
 
     def run(self):

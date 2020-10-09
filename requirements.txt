@@ -1,0 +1,4 @@
+pillow
+baidu-aip
+pyperclip
+googletransx
