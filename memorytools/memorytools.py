@@ -57,7 +57,7 @@ class MemoryTool(object):
         writeConfig(config)
 
     def bye(self, sysTrayIcon: SysTrayIcon):
-        '''退出程序时将配置写到文件中'''
+        '''退出程序'''
         self.end = True
         print('bye')
 

@@ -1,6 +1,6 @@
+from . import BaiduOCR
+from . import LatexOCR
 from PIL import Image, ImageGrab, ImageDraw
-from baiduOCR import BaiduOCR
-from xueersiOCR import LatexOCR
 from boxes import ImageTextBox
 from setting import BAIDU_ACCOUNTS, XUEERSI_ACCOUNTS
 from utils import isCheckIcon, isPickIcon, getRect, Color, copyClip
