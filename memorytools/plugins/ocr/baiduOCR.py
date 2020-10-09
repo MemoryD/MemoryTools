@@ -1,6 +1,6 @@
 from aip import AipOcr
 from PIL import Image
-from utils import pil2bytes
+from tools.utils import pil2bytes
 from globals import BAIDU_ERROR_CODES
 
 

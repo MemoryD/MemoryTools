@@ -8,7 +8,7 @@ from PIL import ImageTk
 from tkinter import Tk, END
 from tkinter.ttk import Label, Button, Frame
 from tkinter.scrolledtext import ScrolledText, Text
-from utils import getTextLine, resizeImg, copyClip
+from tools.utils import getTextLine, resizeImg, copyClip
 from globals import ICON
 
 

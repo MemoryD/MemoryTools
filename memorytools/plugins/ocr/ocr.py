@@ -4,7 +4,7 @@ from . import LatexOCR
 from PIL import Image, ImageGrab, ImageDraw
 from tools.boxes import ImageTextBox
 from globals import BAIDU_ACCOUNTS, XUEERSI_ACCOUNTS, ICON
-from utils import isCheckIcon, isPickIcon, getRect, Color, copyClip
+from tools.utils import isCheckIcon, isPickIcon, getRect, Color, copyClip
 from plugins import BasePlugin
 
 

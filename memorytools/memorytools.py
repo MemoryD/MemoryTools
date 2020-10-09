@@ -1,5 +1,6 @@
 import webbrowser
 from PIL import Image
+from globals import TEXT, ICON
 from time import sleep
 from plugins.ocr import OCR
 from plugins.alert import Alert
@@ -7,7 +8,6 @@ from plugins.copytrans import CopyTrans
 from tools.systray import SysTrayIcon
 from tools.config import Config
 from tools.boxes import ImageBox
-from globals import TEXT, ICON
 
 
 class MemoryTool(object):

@@ -2,7 +2,7 @@ from easydict import EasyDict
 
 from tools.boxes import TextTextBox
 from googletransx import Translator
-from utils import isCheckIcon, isPickIcon, judgeLanguage, pasteClip, copyClip
+from tools.utils import isCheckIcon, isPickIcon, judgeLanguage, pasteClip
 from requests.exceptions import ConnectionError
 from plugins import BasePlugin
 from globals import ICON

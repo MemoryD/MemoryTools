@@ -5,7 +5,7 @@ from hashlib import sha1
 from base64 import b64encode
 from urllib.parse import quote
 from requests import post
-from utils import pil2bytes
+from tools.utils import pil2bytes
 from globals import ALPHADIG, XUEERSI_ERROR_CODES
 
 

@@ -2,7 +2,7 @@ from time import time
 from easydict import EasyDict
 from tools.boxes import LabelBox
 from globals import TEXT, ICON
-from utils import isCheckIcon, isPickIcon
+from tools.utils import isCheckIcon, isPickIcon
 from plugins import BasePlugin
 
 

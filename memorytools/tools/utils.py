@@ -191,7 +191,7 @@ def judgeLanguage(sentence: str):
 
 def count_code():
     """计算当前文件夹里面python代码的行数"""
-    files = os.listdir('.\\')
+    files = os.listdir('..\\')
     total = 0
     for file in files:
         if not os.path.isfile(file):
