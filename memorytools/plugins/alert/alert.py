@@ -1,16 +1,14 @@
 from time import time
-
 from easydict import EasyDict
-
 from boxes import LabelBox
 from setting import ALERT_MSG
 from utils import isCheckIcon, isPickIcon
+from plugins import BasePlugin
 
 
-class Alert(object):
-    def __init__(self, root, config):
-        self.root = root
-        self.config = config
+class Alert(BasePlugin):
+    def __init__(self, root, config) -> None:
+        super(Alert, self).__init__("休息提醒", root, 'alert.ico', config)
         self.start_time = time()
 
     def getConfig(self) -> EasyDict:
@@ -33,15 +31,13 @@ class Alert(object):
             return True
         return False
 
-    def alertText(self):
-        return "关闭提醒" if self.config.is_alert else "开启提醒"
-
     def pauseAlert(self, sysTrayIcon):
         self.config.is_alert = not self.config.is_alert
         if self.config.is_alert:
             self.start_time = time()
         else:
-            LabelBox().show("虽然你关掉了休息提醒，但还是要注意身体！", '确认')
+            print("虽然你关掉了休息提醒，但还是要注意身体！")
+            # LabelBox().show("虽然你关掉了休息提醒，但还是要注意身体！", "确定")
         self.root.refreshMenu()
 
     def changeTime30(self, sysTrayIcon):

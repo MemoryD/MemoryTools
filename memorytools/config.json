@@ -1,9 +1,9 @@
 {
-    "alert": {
+    "休息提醒": {
         "is_alert": true,
-        "alert_time": 90
+        "alert_time": 60
     },
-    "copytrans": {
+    "复制翻译": {
         "is_trans": true,
         "newline": false,
         "strict": false,
@@ -11,8 +11,8 @@
         "src": "en",
         "dest": "zh-cn"
     },
-    "ocr": {
-        "is_ocr": true,
+    "OCR识别": {
+        "is_ocr": false,
         "newline": false,
         "mode": "text"
     }

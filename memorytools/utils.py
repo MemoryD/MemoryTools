@@ -118,11 +118,13 @@ def img2base64(image: str):
 
 
 def readConfig(name=CONFIG) -> EasyDict:
-    '''读配置文件'''
+    """
+    读配置文件
+    """
     if name == CONFIG and not os.path.exists(name):
         resetConfig()
     try:
-        with open(name, "r") as f:
+        with open(name, "r", encoding="utf-8") as f:
             data = f.read()
             return EasyDict(json.loads(data))
     except Exception as e:
@@ -131,22 +133,28 @@ def readConfig(name=CONFIG) -> EasyDict:
 
 
 def writeConfig(data: dict, name=CONFIG):
-    '''写配置文件'''
+    """
+    写配置文件
+    """
     try:
-        data = json.dumps(data, indent=4)
-        with open(name, "w") as f:
+        data = json.dumps(data, indent=4, ensure_ascii=False)
+        with open(name, "w", encoding="utf-8") as f:
             f.write(data)
     except Exception as e:
         print(e)
 
 
 def resetConfig(name=CONFIG):
-    '''重置配置文件'''
+    """
+    重置配置文件
+    """
     writeConfig(DEFAULT_CONFIG, name)
 
 
 def filterStr(sentence: str):
-    '''过滤掉字符串中的标点符号'''
+    """
+    过滤掉字符串中的标点符号
+    """
     sentence = re.sub(NOTAS, '', sentence)
     sentence = sentence.translate(PUNCTUATION_MAP)
     sentence = re.sub('[0-9]', '', sentence).strip()
@@ -155,7 +163,9 @@ def filterStr(sentence: str):
 
 
 def judgeLanguage(sentence: str):
-    '''判断一句话里面英文和中文的占比'''
+    """
+    判断一句话里面英文和中文的占比
+    """
     sentence = filterStr(sentence)
 
     if sentence == '':
@@ -171,16 +181,16 @@ def judgeLanguage(sentence: str):
 
     total = en_num + zh_num
     if total == 0:
-        return (None, 0)
+        return None, 0
 
     if en_num > zh_num:
-        return ('en', en_num / total)
+        return 'en', en_num / total
     else:
-        return ('zh-cn', zh_num / total)
+        return 'zh-cn', zh_num / total
 
 
 def count_code():
-    '''计算当前文件夹里面python代码的行数'''
+    """计算当前文件夹里面python代码的行数"""
     files = os.listdir('.\\')
     total = 0
     for file in files:

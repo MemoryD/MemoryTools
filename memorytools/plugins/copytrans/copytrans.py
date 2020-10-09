@@ -4,12 +4,12 @@ from boxes import TextTextBox
 from googletransx import Translator
 from utils import isCheckIcon, isPickIcon, judgeLanguage, pasteClip, copyClip
 from requests.exceptions import ConnectionError
+from plugins import BasePlugin
 
 
-class CopyTrans(object):
+class CopyTrans(BasePlugin):
     def __init__(self, root, config: EasyDict) -> None:
-        self.root = root
-        self.config = config
+        super(CopyTrans, self).__init__("复制翻译", root, "trans.ico", config)
         self.last = ''  # 记录上次的剪切板内容
         self.translator = Translator(service_urls=['translate.google.cn'])  # 获得翻译接口
 

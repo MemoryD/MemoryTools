@@ -22,7 +22,7 @@ PUNCTUATION_MAP = dict((ord(char), None) for char in punctuation)
 NOTAS = u'[’·°–!"#$%&\'()*+,-./:;<=>?@，。?★、…【】（）《》？“”‘’！[\\]^_`{|}~]+'
 
 DEFAULT_CONFIG = {
-    'copytrans':
+    '复制翻译':
         {
             'is_trans': True,
             'newline': False,
@@ -31,13 +31,13 @@ DEFAULT_CONFIG = {
             'src': 'en',
             'dest': 'zh-cn'
         },
-    'ocr':
+    'OCR识别':
         {
             'is_ocr': True,
             'newline': True,
             'mode': 'text'
         },
-    'alert':
+    '休息提醒':
         {
             'is_alert': True,
             'alert_time': 90

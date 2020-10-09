@@ -5,12 +5,12 @@ from PIL import Image, ImageGrab, ImageDraw
 from boxes import ImageTextBox
 from setting import BAIDU_ACCOUNTS, XUEERSI_ACCOUNTS
 from utils import isCheckIcon, isPickIcon, getRect, Color, copyClip
+from plugins import BasePlugin
 
 
-class OCR(object):
+class OCR(BasePlugin):
     def __init__(self, root, config):
-        self.root = root
-        self.config = config
+        super(OCR, self).__init__("OCR识别", root, "ocr.ico", config)
         self.textocr = BaiduOCR(BAIDU_ACCOUNTS)
         self.mathocr = LatexOCR(XUEERSI_ACCOUNTS)
 
