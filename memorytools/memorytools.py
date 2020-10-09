@@ -1,5 +1,8 @@
 from PIL import Image
 from time import sleep
+
+from easydict import EasyDict
+
 from ocr import OCR
 from alert import Alert
 from copytrans import CopyTrans
@@ -15,12 +18,9 @@ class MemoryTool(object):
     def __init__(self):
         self.icon = getSrc('icon.ico')
         config = readConfig()
-        self.alert = Alert(self)
-        self.ct = CopyTrans(self)
-        self.ocr = OCR(self)
-        self.alert.setConfig(config['alert'])
-        self.ct.setConfig(config['copytrans'])
-        self.ocr.setConfig(config['ocr'])
+        self.alert = Alert(self, config.alert)
+        self.ct = CopyTrans(self, config.copytrans)
+        self.ocr = OCR(self, config.ocr)
 
         self.systray = SysTrayIcon(self.icon, HOVER_TEXT, self.createMenu(),
                                    on_quit=self.bye, default_menu_index=1,
@@ -50,10 +50,10 @@ class MemoryTool(object):
         self.refreshConfig()
 
     def refreshConfig(self):
-        config = {}
-        config['alert'] = self.alert.getConfig()
-        config['copytrans'] = self.ct.getConfig()
-        config['ocr'] = self.ocr.getConfig()
+        config = EasyDict()
+        config.alert = self.alert.getConfig()
+        config.copytrans = self.ct.getConfig()
+        config.ocr = self.ocr.getConfig()
         writeConfig(config)
 
     def bye(self, sysTrayIcon: SysTrayIcon):

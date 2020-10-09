@@ -1,3 +1,5 @@
+from easydict import EasyDict
+
 from boxes import TextTextBox
 from googletransx import Translator
 from utils import isCheckIcon, isPickIcon, judgeLanguage, pasteClip, copyClip
@@ -5,82 +7,55 @@ from requests.exceptions import ConnectionError
 
 
 class CopyTrans(object):
-    def __init__(self, root):
+    def __init__(self, root, config: EasyDict) -> None:
         self.root = root
-        self.is_trans = True
-        self.mode = 'both'
-        self.src = 'en'
-        self.dest = 'zh-cn'
-        self.strict = False
-        self.newline = False
-        self.last = ''                                                  # 记录上次的剪切板内容
-        self.translator = Translator(service_urls=['translate.google.cn'])   # 获得翻译接口
+        self.config = config
+        self.last = ''  # 记录上次的剪切板内容
+        self.translator = Translator(service_urls=['translate.google.cn'])  # 获得翻译接口
 
-    def setConfig(self, config: dict):
-        if 'is_trans' in config:
-            self.is_trans = config['is_trans']
-        if 'newline' in config:
-            self.newline = config['newline']
-        if 'strict' in config:
-            self.strict = config['strict']
-        if 'mode' in config:
-            self.mode = config['mode']
-        if 'src' in config:
-            self.src = config['src']
-        if 'dest' in config:
-            self.dest = config['dest']
-
-    def getConfig(self) -> dict:
-        config = {
-            'is_trans': self.is_trans,
-            'newline': self.newline,
-            'strict': self.strict,
-            'mode': self.mode,
-            'src': self.src,
-            'dest': self.dest
-        }
-        return config
+    def getConfig(self) -> EasyDict:
+        return self.config
 
     def createMenu(self) -> tuple:
         menu_options = (
-                        ("开启翻译", isCheckIcon(self.is_trans), self.pauseTrans, True),
-                        ('去除换行', isCheckIcon(not self.newline), self.turnNewline, True),
-                        ('严格模式', isCheckIcon(self.strict), self.turnStrict, True),
-                        ('英文 <-> 中文', isPickIcon(self.mode=='both'), self.bothMode, False),
-                        ('英文 --> 中文', isPickIcon(self.mode=='en2zh'), self.en2zhMode, False),
-                        ('中文 --> 英文', isPickIcon(self.mode=='zh2en'), self.zh2enMode, False),
-                        )
+            ("开启翻译", isCheckIcon(self.config.is_trans), self.pauseTrans, True),
+            ('去除换行', isCheckIcon(not self.config.newline), self.turnNewline, True),
+            ('严格模式', isCheckIcon(self.config.strict), self.turnStrict, True),
+            ('英文 <-> 中文', isPickIcon(self.config.mode == 'both'), self.bothMode, False),
+            ('英文 --> 中文', isPickIcon(self.config.mode == 'en2zh'), self.en2zhMode, False),
+            ('中文 --> 英文', isPickIcon(self.config.mode == 'zh2en'), self.zh2enMode, False),
+        )
 
         return menu_options
 
     def pauseTrans(self, sysTrayIcon):
-        self.is_trans = not self.is_trans
+        self.config.is_trans = not self.config.is_trans
         self.root.refreshMenu()
 
     def en2zhMode(self, sysTrayIcon):
-        self.mode = 'en2zh'
-        self.src, self.dest = 'en', 'zh-cn'
+        self.config.mode = 'en2zh'
+        self.config.src, self.config.dest = 'en', 'zh-cn'
         self.root.refreshMenu()
 
     def zh2enMode(self, sysTrayIcon):
-        self.mode = 'zh2en'
-        self.src, self.dest = 'zh-cn', 'en'
+        self.config.mode = 'zh2en'
+        self.config.src, self.config.dest = 'zh-cn', 'en'
         self.root.refreshMenu()
 
     def bothMode(self, sysTrayIcon):
-        self.mode = 'both'
+        self.config.mode = 'both'
         self.root.refreshMenu()
 
     def turnStrict(self, sysTrayIcon):
-        self.strict = not self.strict
+        self.config.strict = not self.config.strict
         self.root.refreshMenu()
 
     def turnNewline(self, sysTrayIcon):
-        self.newline = not self.newline
+        self.config.newline = not self.config.newline
         self.root.refreshMenu()
 
     def removeNewline(self, source):
-        if not self.newline:
+        if not self.config.newline:
             sentence = source.replace("\r", '').replace("\n", " ")
         else:
             sentence = source
@@ -99,18 +74,18 @@ class CopyTrans(object):
         if source == "" or source == self.last:
             return None
         text = source.strip()
-        la, pro = judgeLanguage(text)
-        print('检测为：%s, %s. 目标语言为：%s'%(la, pro, self.dest))
-        if not la:
+        src_language, score = judgeLanguage(text)
+        print('检测为：%s, %s. 目标语言为：%s' % (src_language, score, self.config.dest))
+        if not src_language:
             self.last = source
             return None
-        if self.mode != 'both' and la == self.dest and pro > 0.8:
+        if self.config.mode != 'both' and src_language == self.config.dest and score > 0.8:
             self.last = source
             return None
 
-        if self.mode == 'both':
-            self.src = la
-            self.dest = 'en' if la == 'zh-cn' else 'zh-cn'
+        if self.config.mode == 'both':
+            self.config.src = src_language
+            self.config.dest = 'en' if src_language == 'zh-cn' else 'zh-cn'
 
         sentence = self.removeNewline(text)
 
@@ -119,10 +94,10 @@ class CopyTrans(object):
     def transText(self, sentence: str):
         for i in range(3):
             try:
-                if self.strict:
-                    text = self.translator.translate(sentence, src=self.src, dest=self.dest).text
+                if self.config.strict:
+                    text = self.translator.translate(sentence, src=self.config.src, dest=self.config.dest).text
                 else:
-                    text = self.translator.translate(sentence, dest=self.dest).text
+                    text = self.translator.translate(sentence, dest=self.config.dest).text
                 return text
             except ConnectionError as ce:
                 print(ce)
@@ -152,7 +127,7 @@ class CopyTrans(object):
         self.last = pasteClip()
 
     def start(self):
-        if not self.is_trans:                                           # 是否暂停
+        if not self.config.is_trans:  # 是否暂停
             return
-        source = pasteClip()                                          # 获得剪切板内容
+        source = pasteClip()  # 获得剪切板内容
         self.trans(source)

@@ -1,11 +1,12 @@
 import os
 import re
+import json
 from time import sleep
 from pyperclip import paste, copy
-from json import dumps, loads
 from base64 import b64decode, b64encode
 from urllib.parse import quote
 from io import BytesIO
+from easydict import EasyDict
 from setting import COLOR, SRC_PATH, ICONS, CONFIG, DEFAULT_CONFIG, NOTAS, PUNCTUATION_MAP
 
 
@@ -58,15 +59,15 @@ def pil2bytes(im, img_type='png', b64=False):
 
 
 def bs64toImg(pic_code, pic_name):
-    '''将bs64编码的数据写到文件中'''
+    """将bs64编码的数据写到文件中"""
     with open(pic_name, 'wb') as image:
         image.write(b64decode(pic_code))
 
 
 def resizeImg(img, max_w: int, max_h: int):
-    '''
+    """
     对img进行缩放，使其长宽不超过给定的 max_w 和 max_h
-    '''
+    """
     img_w, img_h = img.size
     if img_w < max_w and img_h < max_h:
         return img
@@ -84,7 +85,7 @@ def resizeImg(img, max_w: int, max_h: int):
 
 
 def getSrc(pic: str):
-    '''返回对应资源的完整路径'''
+    """返回对应资源的完整路径"""
     path = os.path.join(SRC_PATH, pic)
     file = os.path.abspath(path)
 
@@ -116,14 +117,14 @@ def img2base64(image: str):
         return image_data_base64
 
 
-def readConfig(name=CONFIG):
+def readConfig(name=CONFIG) -> EasyDict:
     '''读配置文件'''
     if name == CONFIG and not os.path.exists(name):
         resetConfig()
     try:
         with open(name, "r") as f:
             data = f.read()
-            return loads(data)
+            return EasyDict(json.loads(data))
     except Exception as e:
         print(e)
         return DEFAULT_CONFIG
@@ -132,7 +133,7 @@ def readConfig(name=CONFIG):
 def writeConfig(data: dict, name=CONFIG):
     '''写配置文件'''
     try:
-        data = dumps(data)
+        data = json.dumps(data, indent=4)
         with open(name, "w") as f:
             f.write(data)
     except Exception as e:
