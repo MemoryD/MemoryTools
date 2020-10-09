@@ -1,7 +1,7 @@
-import pyperclip as p
 from boxes import TextTextBox
 from googletransx import Translator
-from utils import isCheckIcon, isPickIcon, judgeLanguage
+from utils import isCheckIcon, isPickIcon, judgeLanguage, pasteClip, copyClip
+from requests.exceptions import ConnectionError
 
 
 class CopyTrans(object):
@@ -79,45 +79,80 @@ class CopyTrans(object):
         self.newline = not self.newline
         self.root.refreshMenu()
 
-    def trans(self, translator: Translator, source: str):
-        if source == "" or source == self.last:                         # 是否为空或者跟上次一样
-            return None
-
-        la, pro = judgeLanguage(source)
-        print('检测为：%s, %s. 目标语言为：%s'%(la, pro, self.dest))
-        if self.mode != 'both' and la == self.dest and pro > 0.8:                         # 是否为纯目标语言
-            self.last = source
-            return None
-
+    def removeNewline(self, source):
         if not self.newline:
-            sentence = source.replace("\r", '').replace("\n", " ")          # 去除换行符
+            sentence = source.replace("\r", '').replace("\n", " ")
         else:
             sentence = source
 
-        sentence = sentence.strip()
+        return sentence
+
+    def preProcess(self, source):
+        '''
+        对剪切板的文本进行预处理。
+        首先判断是否为空或者与上次复制的一致，如果是则不翻译。
+        然后检测语言，是否不包含中英文，如果是则不翻译。
+        再判断是否其中的目标语言占比过大，如果是则不翻译。
+        如果是互译模式，根据检测结果设置源语言和目标语言。
+        再判断是否要去除其中的换行。
+        '''
+        if source == "" or source == self.last:
+            return None
+        text = source.strip()
+        la, pro = judgeLanguage(text)
+        print('检测为：%s, %s. 目标语言为：%s'%(la, pro, self.dest))
+        if not la:
+            self.last = source
+            return None
+        if self.mode != 'both' and la == self.dest and pro > 0.8:
+            self.last = source
+            return None
 
         if self.mode == 'both':
             self.src = la
             self.dest = 'en' if la == 'zh-cn' else 'zh-cn'
 
-        try:
-            if self.strict:
-                text = translator.translate(sentence, src=self.src, dest=self.dest).text  # 翻译
-            else:
-                text = translator.translate(sentence, dest=self.dest).text
-        except Exception as e:
-            text = str(e)
-        # 如果与原文本一样，则不显示
+        sentence = self.removeNewline(text)
+
+        return sentence
+
+    def transText(self, sentence: str):
+        for i in range(3):
+            try:
+                if self.strict:
+                    text = self.translator.translate(sentence, src=self.src, dest=self.dest).text
+                else:
+                    text = self.translator.translate(sentence, dest=self.dest).text
+                return text
+            except ConnectionError as ce:
+                print(ce)
+                self.translator = Translator(service_urls=['translate.google.cn'])
+                text = str(ce)
+            except Exception as e:
+                print(e)
+                text = str(e)
+        return text
+
+    def trans(self, source: str):
+        sentence = self.preProcess(source)
+        if not sentence:
+            return None
+
+        text = self.transText(sentence)
+
         if text == sentence:
             self.last = source
             print('译文与原文一致，因此不显示。')
             return None
-        # print("%s\n%s\n" % (sentence, text))                            # 打印到命令行
+        # print("%s\n%s\n" % (sentence, text))
         TextTextBox('翻译结果').show(sentence, text)
-        self.last = p.paste()
+        # paste = pasteClip()
+        # if paste == source:
+        #     copyClip(sentence)
+        self.last = pasteClip()
 
     def start(self):
         if not self.is_trans:                                           # 是否暂停
             return
-        source = p.paste()                                          # 获得剪切板内容
-        self.trans(self.translator, source)
+        source = pasteClip()                                          # 获得剪切板内容
+        self.trans(source)

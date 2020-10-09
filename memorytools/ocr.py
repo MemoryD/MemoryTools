@@ -1,10 +1,9 @@
-import pyperclip as p
 from PIL import Image, ImageGrab, ImageDraw
 from baiduOCR import BaiduOCR
 from xueersiOCR import LatexOCR
 from boxes import ImageTextBox
 from setting import BAIDU_ACCOUNTS, XUEERSI_ACCOUNTS
-from utils import isCheckIcon, isPickIcon, getRect, Color
+from utils import isCheckIcon, isPickIcon, getRect, Color, copyClip
 
 
 class OCR(object):
@@ -77,7 +76,7 @@ class OCR(object):
             except Exception as e:
                 text = str(e)
 
-            p.copy('')
+            copyClip('')
             ImageTextBox('OCR识别结果').show(im, text)
 
 

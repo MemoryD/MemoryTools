@@ -4,6 +4,7 @@ from pic import *
 ABOUT_IMG = 'README.png'
 CONFIG = 'config.json'
 SRC_PATH = 'src'
+LOG_PATH = 'log'
 ICONS = {
             'icon.ico': ICON_ICO, 'trans.ico': TRANS_ICO, 'ocr.ico': OCR_ICO,
             'alert.ico': ALERT_ICO, 'exit.ico': EXIT_ICO, 'about.ico': ABOUT_ICO,

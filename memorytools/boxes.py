@@ -4,13 +4,11 @@
 @date: 2020/3/23
 @description: 自定义的一些弹出框
 '''
-import os
-import pyperclip as p
 from PIL import ImageTk
 from tkinter import Tk, END
 from tkinter.ttk import Label, Button, Frame
 from tkinter.scrolledtext import ScrolledText, Text
-from utils import getTextLine, resizeImg
+from utils import getTextLine, resizeImg, getSrc, copyClip
 
 
 class BaseBox(Tk):
@@ -25,8 +23,7 @@ class BaseBox(Tk):
         self.screen_h = self.winfo_screenheight()
         self.title(title)
         self.resizable(False, False)
-        if os.path.exists("icon.ico"):
-            self.iconbitmap('icon.ico')
+        self.iconbitmap(getSrc('icon.ico'))
 
         min_w = self.screen_w // 3
         min_h = self.screen_h // 3
@@ -60,7 +57,7 @@ class BaseBox(Tk):
 
     def copy(self):
         txt = self.textbox.get("1.0", END)
-        p.copy(txt)
+        copyClip(txt)
         self.destroy()
 
 

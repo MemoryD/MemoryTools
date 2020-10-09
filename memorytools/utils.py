@@ -1,5 +1,7 @@
 import os
 import re
+from time import sleep
+from pyperclip import paste, copy
 from json import dumps, loads
 from base64 import b64decode, b64encode
 from urllib.parse import quote
@@ -16,6 +18,24 @@ class Color(object):
         color = self.colors[self.index]
         self.index = (self.index + 1) % (len(self.colors))
         return color
+
+
+def pasteClip():
+    for i in range(3):
+        try:
+            text = paste()
+            return text
+        except Exception as e:
+            if i == 2:
+                return str(e)
+            sleep(0.1)
+
+
+def copyClip(text):
+    try:
+        copy(text)
+    except Exception as e:
+        print(e)
 
 
 def getTextLine(text: str):
@@ -137,6 +157,9 @@ def judgeLanguage(sentence: str):
     '''判断一句话里面英文和中文的占比'''
     sentence = filterStr(sentence)
 
+    if sentence == '':
+        return (None, 0)
+
     en_pattern = re.compile(u"[a-zA-Z]")
     zh_pattern = re.compile(u"[\u4e00-\u9fa5]")
 
@@ -144,7 +167,11 @@ def judgeLanguage(sentence: str):
     zh = re.findall(zh_pattern, sentence)
     en_num = len(en) // 3
     zh_num = len(zh)
+
     total = en_num + zh_num
+    if total == 0:
+        return (None, 0)
+
     if en_num > zh_num:
         return ('en', en_num / total)
     else:

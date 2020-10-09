@@ -36,7 +36,7 @@ class XueersiOCR(object):
         params['img_type'] = img_type
         params['recog_formula'] = 0
 
-        payload = self.join_params(params)
+        payload = self.joinParams(params)
         headers = {
             'Content-Type': "application/x-www-form-urlencoded",
             'cache-control': "no-cache",
@@ -51,7 +51,7 @@ class XueersiOCR(object):
         return res
 
     @classmethod
-    def join_params(self, params: dict)->str:
+    def joinParams(self, params: dict) -> str:
         '''
         用于拼接参数。因为直接传递字典会返回图片模糊的结果，待解决。
         '''

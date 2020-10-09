@@ -11,6 +11,7 @@ from setting import HOVER_TEXT, ABOUT_IMG
 
 class MemoryTool(object):
     '''程序的入口类'''
+
     def __init__(self):
         self.icon = getSrc('icon.ico')
         config = readConfig()
