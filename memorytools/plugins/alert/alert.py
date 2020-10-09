@@ -1,14 +1,14 @@
 from time import time
 from easydict import EasyDict
-from boxes import LabelBox
-from setting import ALERT_MSG
+from tools.boxes import LabelBox
+from globals import TEXT, ICON
 from utils import isCheckIcon, isPickIcon
 from plugins import BasePlugin
 
 
 class Alert(BasePlugin):
     def __init__(self, root, config) -> None:
-        super(Alert, self).__init__("休息提醒", root, 'alert.ico', config)
+        super(Alert, self).__init__("休息提醒", root, ICON.alert, config)
         self.start_time = time()
 
     def getConfig(self) -> EasyDict:
@@ -31,7 +31,7 @@ class Alert(BasePlugin):
             return True
         return False
 
-    def pauseAlert(self, sysTrayIcon):
+    def pauseAlert(self, s):
         self.config.is_alert = not self.config.is_alert
         if self.config.is_alert:
             self.start_time = time()
@@ -40,24 +40,24 @@ class Alert(BasePlugin):
             # LabelBox().show("虽然你关掉了休息提醒，但还是要注意身体！", "确定")
         self.root.refreshMenu()
 
-    def changeTime30(self, sysTrayIcon):
+    def changeTime30(self, s):
         self.config.alert_time = 30
         self.root.refreshMenu()
 
-    def changeTime60(self, sysTrayIcon):
+    def changeTime60(self, s):
         self.config.alert_time = 60
         self.root.refreshMenu()
 
-    def changeTime90(self, sysTrayIcon):
+    def changeTime90(self, s):
         self.config.alert_time = 90
         self.root.refreshMenu()
 
-    def changeTime120(self, sysTrayIcon):
+    def changeTime120(self, s):
         self.config.alert_time = 120
         self.root.refreshMenu()
 
     def start(self):
         if self.config.is_alert and self.alert():
-            alert_message = "你已经连续工作 %d 分钟了！是时候休息一下了！\n%s" % (self.config.alert_time, ALERT_MSG)
+            alert_message = TEXT.alert % self.config.alert_time
             LabelBox('危险警报').show(alert_message, '等你想要继续工作了再点我')
             self.start_time = time()

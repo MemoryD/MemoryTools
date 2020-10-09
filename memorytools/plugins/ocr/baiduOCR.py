@@ -1,7 +1,7 @@
 from aip import AipOcr
 from PIL import Image
 from utils import pil2bytes
-from setting import BAIDU_ERROR_CODES
+from globals import BAIDU_ERROR_CODES
 
 
 class BaiduOCR(object):

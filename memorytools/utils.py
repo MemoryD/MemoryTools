@@ -7,7 +7,7 @@ from base64 import b64decode, b64encode
 from urllib.parse import quote
 from io import BytesIO
 from easydict import EasyDict
-from setting import COLOR, SRC_PATH, ICONS, CONFIG, DEFAULT_CONFIG, NOTAS, PUNCTUATION_MAP
+from globals import *
 
 
 class Color(object):
@@ -40,17 +40,17 @@ def copyClip(text):
 
 
 def getTextLine(text: str):
-    '''返回所给的文本有几行'''
+    """返回所给的文本有几行"""
     return len(text.split('\n'))
 
 
 def getRect(x1: int, y1: int, x2: int, y2: int):
-    '''给定矩形框的左上角和右下角坐标，返回四个角的坐标'''
+    """给定矩形框的左上角和右下角坐标，返回四个角的坐标"""
     return [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]
 
 
 def pil2bytes(im, img_type='png', b64=False):
-    '''将PIL.Image格式的图像转化为二进制数据'''
+    """将PIL.Image格式的图像转化为二进制数据"""
     bf = BytesIO()
     im.save(bf, img_type)
     img = bf.getvalue()
@@ -84,32 +84,32 @@ def resizeImg(img, max_w: int, max_h: int):
     return img
 
 
-def getSrc(pic: str):
-    """返回对应资源的完整路径"""
-    path = os.path.join(SRC_PATH, pic)
-    file = os.path.abspath(path)
-
-    if not os.path.exists(SRC_PATH):
-        os.makedirs(SRC_PATH)
-    if not os.path.exists(file):
-        if pic in ICONS:
-            bs64toImg(ICONS[pic], file)
-
-    return file
+# def getSrc(pic: str):
+#     """返回对应资源的完整路径"""
+#     path = os.path.join(ICON_PATH, pic)
+#     file = os.path.abspath(path)
+#
+#     if not os.path.exists(ICON_PATH):
+#         os.makedirs(ICON_PATH)
+#     if not os.path.exists(file):
+#         if pic in ICONS:
+#             bs64toImg(ICONS[pic], file)
+#
+#     return file
 
 
 def isCheckIcon(check: bool):
-    '''是否选中（两种状态）'''
-    return getSrc('check.ico') if check else None
+    """是否选中（两种状态）"""
+    return ICON.check if check else None
 
 
 def isPickIcon(pick: bool):
-    '''是否被选中（多项中的一个）'''
-    return getSrc('pick.ico') if pick else None
+    """是否被选中（多项中的一个）"""
+    return ICON.pick if pick else None
 
 
 def img2base64(image: str):
-    '''将图像从文件中读取出来并转化为base64编码'''
+    """将图像从文件中读取出来并转化为base64编码"""
     with open(image, 'rb') as bin_data:
         image_data = bin_data.read()
         image_data_base64 = b64encode(image_data)
@@ -117,38 +117,38 @@ def img2base64(image: str):
         return image_data_base64
 
 
-def readConfig(name=CONFIG) -> EasyDict:
-    """
-    读配置文件
-    """
-    if name == CONFIG and not os.path.exists(name):
-        resetConfig()
-    try:
-        with open(name, "r", encoding="utf-8") as f:
-            data = f.read()
-            return EasyDict(json.loads(data))
-    except Exception as e:
-        print(e)
-        return DEFAULT_CONFIG
-
-
-def writeConfig(data: dict, name=CONFIG):
-    """
-    写配置文件
-    """
-    try:
-        data = json.dumps(data, indent=4, ensure_ascii=False)
-        with open(name, "w", encoding="utf-8") as f:
-            f.write(data)
-    except Exception as e:
-        print(e)
-
-
-def resetConfig(name=CONFIG):
-    """
-    重置配置文件
-    """
-    writeConfig(DEFAULT_CONFIG, name)
+# def readConfig(config=PATH.config) -> EasyDict:
+#     """
+#     读配置文件
+#     """
+#     if config == PATH.config and not os.path.exists(name):
+#         resetConfig()
+#     try:
+#         with open(name, "r", encoding="utf-8") as f:
+#             data = f.read()
+#             return EasyDict(json.loads(data))
+#     except Exception as e:
+#         print(e)
+#         return DEFAULT_CONFIG
+#
+#
+# def writeConfig(data: dict, name=CONFIG):
+#     """
+#     写配置文件
+#     """
+#     try:
+#         data = json.dumps(data, indent=4, ensure_ascii=False)
+#         with open(name, "w", encoding="utf-8") as f:
+#             f.write(data)
+#     except Exception as e:
+#         print(e)
+#
+#
+# def resetConfig(name=CONFIG):
+#     """
+#     重置配置文件
+#     """
+#     writeConfig(DEFAULT_CONFIG, name)
 
 
 def filterStr(sentence: str):

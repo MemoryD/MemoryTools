@@ -8,7 +8,8 @@ from PIL import ImageTk
 from tkinter import Tk, END
 from tkinter.ttk import Label, Button, Frame
 from tkinter.scrolledtext import ScrolledText, Text
-from utils import getTextLine, resizeImg, getSrc, copyClip
+from utils import getTextLine, resizeImg, copyClip
+from globals import ICON
 
 
 class BaseBox(Tk):
@@ -23,7 +24,7 @@ class BaseBox(Tk):
         self.screen_h = self.winfo_screenheight()
         self.title(title)
         self.resizable(False, False)
-        self.iconbitmap(getSrc('icon.ico'))
+        self.iconbitmap(ICON.icon)
 
         min_w = self.screen_w // 3
         min_h = self.screen_h // 3

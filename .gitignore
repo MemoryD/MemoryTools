@@ -8,3 +8,4 @@ test/
 src/
 memorytools/__pycache__/
 upx-3.95-win64/
+.idea/

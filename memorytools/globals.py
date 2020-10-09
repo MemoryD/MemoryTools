@@ -1,20 +1,35 @@
 from string import punctuation
 from easydict import EasyDict
+from pathlib import Path
+# from src.src import *
 
-from pic import *
 
-ABOUT_IMG = 'README.png'
-CONFIG = 'config.json'
-SRC_PATH = 'src'
-LOG_PATH = 'log'
-ICONS = {
-    'icon.ico': ICON_ICO, 'trans.ico': TRANS_ICO, 'ocr.ico': OCR_ICO,
-    'alert.ico': ALERT_ICO, 'exit.ico': EXIT_ICO, 'about.ico': ABOUT_ICO,
-    'check.ico': CHECK_ICO, 'pick.ico': PICK_ICO
-}
+class PATH:
+    cwd = Path()
+    icon = cwd / 'src' / 'icon'
+    config = cwd / 'config.json'
+    log = cwd / 'log'
 
-HOVER_TEXT = "Memory Tools"
-ALERT_MSG = 'tip: 连续在电脑前工作太久容易脱发，得颈椎病，猝死。'
+
+class TEXT:
+    hover = "Memory Tools"
+    alert = '你已经连续工作 %d 分钟了！是时候休息一下了！\ntip: 连续在电脑前工作太久容易脱发，得颈椎病，猝死。'
+
+
+ICON = EasyDict()
+for ico in PATH.icon.glob("*.ico"):
+    ICON[ico.stem] = str(ico)
+
+
+# ABOUT_IMG = 'README.png'
+#
+# ICONS = {
+#     'icon.ico': ICON_ICO, 'trans.ico': TRANS_ICO, 'ocr.ico': OCR_ICO,
+#     'alert.ico': ALERT_ICO, 'exit.ico': EXIT_ICO, 'about.ico': ABOUT_ICO,
+#     'check.ico': CHECK_ICO, 'pick.ico': PICK_ICO
+# }
+
+
 
 ALPHADIG = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 COLOR = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 0, 255), (0, 255, 255)]

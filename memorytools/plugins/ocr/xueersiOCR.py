@@ -6,7 +6,7 @@ from base64 import b64encode
 from urllib.parse import quote
 from requests import post
 from utils import pil2bytes
-from setting import ALPHADIG, XUEERSI_ERROR_CODES
+from globals import ALPHADIG, XUEERSI_ERROR_CODES
 
 
 class XueersiOCR(object):

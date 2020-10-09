@@ -1,5 +1,4 @@
 from easydict import EasyDict
-from utils import getSrc
 
 
 class BasePlugin(object):
@@ -9,11 +8,11 @@ class BasePlugin(object):
         self.icon = icon
         self.config = config[name]
 
-    def getConfig(self) -> EasyDict:
+    def getConfig(self) -> tuple:
         return self.name, self.config
 
     def createMenu(self) -> tuple:
         return ()
 
     def initMenu(self) -> tuple:
-        return self.name, getSrc(self.icon), self.createMenu(), True
+        return self.name, self.icon, self.createMenu(), True

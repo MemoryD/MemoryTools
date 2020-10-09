@@ -1,14 +1,13 @@
+import webbrowser
 from PIL import Image
 from time import sleep
-
-from easydict import EasyDict
 from plugins.ocr import OCR
 from plugins.alert import Alert
 from plugins.copytrans import CopyTrans
-from systray import SysTrayIcon
-from boxes import ImageBox
-from utils import getSrc, readConfig, writeConfig
-from setting import HOVER_TEXT, ABOUT_IMG
+from tools.systray import SysTrayIcon
+from tools.config import Config
+from tools.boxes import ImageBox
+from globals import TEXT, ICON
 
 
 class MemoryTool(object):
@@ -17,27 +16,20 @@ class MemoryTool(object):
     """
 
     def __init__(self):
-        self.icon = getSrc('icon.ico')
-        config = readConfig()
-
+        self.icon = ICON.icon
+        self.config = Config()
+        config = self.config.readConfig()
         copytrans = CopyTrans(self, config)
         ocr = OCR(self, config)
         alert = Alert(self, config)
         self.plugins = [copytrans, ocr, alert]
 
-        self.systray = SysTrayIcon(self.icon, HOVER_TEXT, self.createMenu(),
+        self.systray = SysTrayIcon(self.icon, TEXT.hover, self.createMenu(),
                                    on_quit=self.bye, default_menu_index=1,
-                                   exit_ico=getSrc('exit.ico')
+                                   exit_ico=ICON.exit
                                    )
 
-        self.is_about = False
         self.end = False
-
-    def about(self, s: SysTrayIcon):
-        """
-        菜单中的 关于 选项，如果在线程中调用会出错，因此用一个变量控制，在主线程中显示信息
-        """
-        self.is_about = True
 
     def createMenu(self):
         """创建托盘程序的菜单
@@ -50,7 +42,7 @@ class MemoryTool(object):
         menu_options = []
         for plugin in self.plugins:
             menu_options.append(plugin.initMenu())
-        menu_options.append(('关于', getSrc('about.ico'), self.about, True))
+        menu_options.append(('关于', ICON.about, self.about, True))
 
         return tuple(menu_options)
 
@@ -70,7 +62,13 @@ class MemoryTool(object):
             name, con = plugin.getConfig()
             config[name] = con
 
-        writeConfig(config)
+        self.config.writeConfig(config)
+
+    def about(self, s: SysTrayIcon):
+        """
+        菜单中的 关于 选项，如果在线程中调用会出错，因此用一个变量控制，在主线程中显示信息
+        """
+        webbrowser.open("https://github.com/MemoryD/MemoryTools")
 
     def bye(self, s: SysTrayIcon):
         """退出程序"""
@@ -82,10 +80,6 @@ class MemoryTool(object):
         self.systray.start()
         while not self.end:
             sleep(0.1)
-            if self.is_about:
-                self.is_about = False
-                img = Image.open(getSrc(ABOUT_IMG))
-                ImageBox('Memory Tools').show(img)
             for plugin in self.plugins:
                 plugin.start()
 

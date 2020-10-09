@@ -2,15 +2,15 @@ from easydict import EasyDict
 from . import BaiduOCR
 from . import LatexOCR
 from PIL import Image, ImageGrab, ImageDraw
-from boxes import ImageTextBox
-from setting import BAIDU_ACCOUNTS, XUEERSI_ACCOUNTS
+from tools.boxes import ImageTextBox
+from globals import BAIDU_ACCOUNTS, XUEERSI_ACCOUNTS, ICON
 from utils import isCheckIcon, isPickIcon, getRect, Color, copyClip
 from plugins import BasePlugin
 
 
 class OCR(BasePlugin):
     def __init__(self, root, config):
-        super(OCR, self).__init__("OCR识别", root, "ocr.ico", config)
+        super(OCR, self).__init__("OCR识别", root, ICON.ocr, config)
         self.textocr = BaiduOCR(BAIDU_ACCOUNTS)
         self.mathocr = LatexOCR(XUEERSI_ACCOUNTS)
 
