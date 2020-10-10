@@ -1,17 +1,22 @@
 import json
+from pathlib import Path
 from easydict import EasyDict
 from globals import PATH
 
 
-class Config(object):
-    def __init__(self, path=PATH.config):
+class Configer(object):
+    def __init__(self, path: Path, default=None):
         self.path = path
+        self.default = default
 
     def readConfig(self) -> EasyDict:
         """
         读配置文件
         """
-        config = self.path.read_text(encoding="utf-8")
+        if self.path.exists:
+            config = self.path.read_text(encoding="utf-8")
+        else:
+            config = self.default
         return EasyDict(json.loads(config))
 
     def writeConfig(self, data: dict):

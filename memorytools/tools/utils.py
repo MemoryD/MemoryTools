@@ -1,8 +1,7 @@
 import os
 import re
-import json
+import pyperclip
 from time import sleep
-from pyperclip import paste, copy
 from base64 import b64decode, b64encode
 from urllib.parse import quote
 from io import BytesIO
@@ -11,6 +10,9 @@ from globals import *
 
 
 class Color(object):
+    """
+    一个简单的获取颜色的类
+    """
     def __init__(self):
         self.colors = COLOR
         self.index = 0
@@ -22,9 +24,13 @@ class Color(object):
 
 
 def pasteClip():
+    """
+    获取剪切板内容，为了防止获取失败，因此会重试3次
+    :return:
+    """
     for i in range(3):
         try:
-            text = paste()
+            text = pyperclip.paste()
             return text
         except Exception as e:
             if i == 2:
@@ -34,7 +40,7 @@ def pasteClip():
 
 def copyClip(text):
     try:
-        copy(text)
+        pyperclip.copy(text)
     except Exception as e:
         print(e)
 
@@ -84,20 +90,6 @@ def resizeImg(img, max_w: int, max_h: int):
     return img
 
 
-# def getSrc(pic: str):
-#     """返回对应资源的完整路径"""
-#     path = os.path.join(ICON_PATH, pic)
-#     file = os.path.abspath(path)
-#
-#     if not os.path.exists(ICON_PATH):
-#         os.makedirs(ICON_PATH)
-#     if not os.path.exists(file):
-#         if pic in ICONS:
-#             bs64toImg(ICONS[pic], file)
-#
-#     return file
-
-
 def isCheckIcon(check: bool):
     """是否选中（两种状态）"""
     return ICON.check if check else None
@@ -115,40 +107,6 @@ def img2base64(image: str):
         image_data_base64 = b64encode(image_data)
         image_data_base64 = quote(image_data_base64)
         return image_data_base64
-
-
-# def readConfig(config=PATH.config) -> EasyDict:
-#     """
-#     读配置文件
-#     """
-#     if config == PATH.config and not os.path.exists(name):
-#         resetConfig()
-#     try:
-#         with open(name, "r", encoding="utf-8") as f:
-#             data = f.read()
-#             return EasyDict(json.loads(data))
-#     except Exception as e:
-#         print(e)
-#         return DEFAULT_CONFIG
-#
-#
-# def writeConfig(data: dict, name=CONFIG):
-#     """
-#     写配置文件
-#     """
-#     try:
-#         data = json.dumps(data, indent=4, ensure_ascii=False)
-#         with open(name, "w", encoding="utf-8") as f:
-#             f.write(data)
-#     except Exception as e:
-#         print(e)
-#
-#
-# def resetConfig(name=CONFIG):
-#     """
-#     重置配置文件
-#     """
-#     writeConfig(DEFAULT_CONFIG, name)
 
 
 def filterStr(sentence: str):
@@ -169,7 +127,7 @@ def judgeLanguage(sentence: str):
     sentence = filterStr(sentence)
 
     if sentence == '':
-        return (None, 0)
+        return None, 0
 
     en_pattern = re.compile(u"[a-zA-Z]")
     zh_pattern = re.compile(u"[\u4e00-\u9fa5]")

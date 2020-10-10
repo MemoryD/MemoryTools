@@ -17,8 +17,9 @@ icon_bs64 = {
 
 class PATH:
     cwd = Path()
+    plugins = cwd / 'plugins'
+    config = plugins / 'config.json'
     icon = cwd / 'src' / 'icon'
-    config = cwd / 'config.json'
     log = cwd / 'log'
 
 

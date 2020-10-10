@@ -1,10 +1,6 @@
 {
-    "休息提醒": {
-        "is_alert": true,
-        "alert_time": 60
-    },
     "复制翻译": {
-        "is_trans": true,
+        "is_trans": false,
         "newline": false,
         "strict": false,
         "mode": "both",
@@ -15,5 +11,9 @@
         "is_ocr": false,
         "newline": false,
         "mode": "text"
+    },
+    "休息提醒": {
+        "is_alert": false,
+        "alert_time": 30
     }
 }

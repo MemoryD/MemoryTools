@@ -1,13 +1,11 @@
 import webbrowser
-from PIL import Image
 from globals import TEXT, ICON
 from time import sleep
 from plugins.ocr import OCR
 from plugins.alert import Alert
 from plugins.copytrans import CopyTrans
 from tools.systray import SysTrayIcon
-from tools.config import Config
-from tools.boxes import ImageBox
+# from tools.config import Config
 
 
 class MemoryTool(object):
@@ -16,15 +14,14 @@ class MemoryTool(object):
     """
 
     def __init__(self):
-        self.icon = ICON.icon
-        self.config = Config()
-        config = self.config.readConfig()
-        copytrans = CopyTrans(self, config)
-        ocr = OCR(self, config)
-        alert = Alert(self, config)
+        # self.config = Config()
+        # config = self.config.readConfig()
+        copytrans = CopyTrans(self)
+        ocr = OCR(self)
+        alert = Alert(self)
         self.plugins = [copytrans, ocr, alert]
 
-        self.systray = SysTrayIcon(self.icon, TEXT.hover, self.createMenu(),
+        self.systray = SysTrayIcon(ICON.icon, TEXT.hover, self.createMenu(),
                                    on_quit=self.bye, default_menu_index=1,
                                    exit_ico=ICON.exit
                                    )
@@ -41,7 +38,7 @@ class MemoryTool(object):
         """
         menu_options = []
         for plugin in self.plugins:
-            menu_options.append(plugin.initMenu())
+            menu_options.append(plugin.init_menu())
         menu_options.append(('关于', ICON.about, self.about, True))
 
         return tuple(menu_options)
@@ -51,32 +48,36 @@ class MemoryTool(object):
         刷新菜单
         """
         self.systray.refreshMenu(self.createMenu())
-        self.refreshConfig()
+        # self.refreshConfig()
 
-    def refreshConfig(self) -> None:
-        """
-        写入设置
-        """
-        config = {}
-        for plugin in self.plugins:
-            name, con = plugin.getConfig()
-            config[name] = con
-
-        self.config.writeConfig(config)
+    # def refreshConfig(self) -> None:
+    #     """
+    #     写入设置
+    #     """
+    #     config = {}
+    #     for plugin in self.plugins:
+    #         name, con = plugin.get_config()
+    #         config[name] = con
+    #
+    #     self.config.writeConfig(config)
 
     def about(self, s: SysTrayIcon):
         """
-        菜单中的 关于 选项，如果在线程中调用会出错，因此用一个变量控制，在主线程中显示信息
+        菜单中的 关于 选项
         """
         webbrowser.open("https://github.com/MemoryD/MemoryTools")
 
     def bye(self, s: SysTrayIcon):
-        """退出程序"""
+        """
+        退出程序
+        """
         self.end = True
         print('bye')
 
     def run(self):
-        """启动"""
+        """
+        启动主程序
+        """
         self.systray.start()
         while not self.end:
             sleep(0.1)
