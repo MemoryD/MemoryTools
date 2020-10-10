@@ -257,3 +257,82 @@
 [2020-10-10 16:48:43,383 INFO] - [休息提醒] 开启休息提醒
 [2020-10-10 16:48:49,299 INFO] - [MemoryTools] 退出程序
 
+[2020-10-10 16:54:51,913 INFO] - [MemoryTools] 启动程序
+[2020-10-10 16:54:52,156 INFO] - [plugin init] 发现插件包: plugins.01_copytrans
+[2020-10-10 16:54:52,203 INFO] - [plugin init] 发现插件包: plugins.02_ocr
+[2020-10-10 16:54:52,216 INFO] - [plugin init] 发现插件包: plugins.03_alert
+[2020-10-10 16:54:52,217 INFO] - [plugin base] 初始化插件: 复制翻译
+[2020-10-10 16:54:52,220 INFO] - [plugin base] 初始化插件: OCR识别
+[2020-10-10 16:54:52,220 INFO] - [plugin base] 初始化插件: 休息提醒
+[2020-10-10 16:54:52,222 INFO] - [MemoryTools] 插件开始运行...
+[2020-10-10 16:54:52,330 INFO] - [复制翻译] 剪切板文本为: 
+[2020-10-10 16:54:52,331 INFO] - [复制翻译] 文本的主要语言为: None, 占比: 0
+[2020-10-10 16:54:52,332 INFO] - [复制翻译] 文本中不含中英文，因此不翻译.
+[2020-10-10 16:54:58,446 INFO] - [MemoryTools] 退出程序
+
+[2020-10-10 17:08:52,907 INFO] - [MemoryTools] 启动程序
+[2020-10-10 17:08:53,120 INFO] - [plugin init] 发现插件包: plugins.01_copytrans
+[2020-10-10 17:08:53,155 INFO] - [plugin init] 发现插件包: plugins.02_ocr
+[2020-10-10 17:08:53,157 INFO] - [plugin init] 发现插件包: plugins.03_alert
+[2020-10-10 17:09:13,577 INFO] - [MemoryTools] 启动程序
+[2020-10-10 17:09:13,778 INFO] - [plugin init] 发现插件包: plugins.01_copytrans
+[2020-10-10 17:09:13,809 INFO] - [plugin init] 发现插件包: plugins.02_ocr
+[2020-10-10 17:09:13,813 INFO] - [plugin init] 发现插件包: plugins.03_alert
+[2020-10-10 17:09:13,817 INFO] - [plugin init] 发现插件包: plugins.04_help
+[2020-10-10 17:09:13,818 INFO] - [plugin base] 初始化插件: 复制翻译
+[2020-10-10 17:09:13,820 INFO] - [plugin base] 初始化插件: OCR识别
+[2020-10-10 17:09:13,821 INFO] - [plugin base] 初始化插件: 休息提醒
+[2020-10-10 17:10:57,256 INFO] - [MemoryTools] 启动程序
+[2020-10-10 17:10:57,466 INFO] - [plugin init] 发现插件包: plugins.01_copytrans
+[2020-10-10 17:10:57,498 INFO] - [plugin init] 发现插件包: plugins.02_ocr
+[2020-10-10 17:10:57,502 INFO] - [plugin init] 发现插件包: plugins.03_alert
+[2020-10-10 17:10:57,504 INFO] - [plugin init] 发现插件包: plugins.04_help
+[2020-10-10 17:10:57,505 INFO] - [plugin base] 初始化插件: 复制翻译
+[2020-10-10 17:10:57,507 INFO] - [plugin base] 初始化插件: OCR识别
+[2020-10-10 17:10:57,507 INFO] - [plugin base] 初始化插件: 休息提醒
+[2020-10-10 17:10:57,508 INFO] - [plugin base] 初始化插件: 帮助
+[2020-10-10 17:10:57,509 INFO] - [MemoryTools] 插件开始运行...
+[2020-10-10 17:10:57,625 INFO] - [复制翻译] 剪切板文本为: # -*- coding: utf-8 -*-
+[2020-10-10 17:10:57,629 INFO] - [复制翻译] 文本的主要语言为: en, 占比: 1.0
+[2020-10-10 17:10:59,246 INFO] - [复制翻译] 翻译结果为: ＃-*-编码：utf-8-*-
+[2020-10-10 17:12:12,125 INFO] - [复制翻译] 剪切板文本为: "https://github.com/MemoryD/MemoryTools"
+[2020-10-10 17:12:12,126 INFO] - [复制翻译] 文本的主要语言为: en, 占比: 1.0
+[2020-10-10 17:12:12,565 INFO] - [复制翻译] 翻译结果为: "HTTPS://GitHub.com/memory D/memory tools"
+[2020-10-10 17:13:17,495 INFO] - [复制翻译] 剪切板文本为: https://github.com/MemoryD/MemoryTools/releases
+[2020-10-10 17:13:17,496 INFO] - [复制翻译] 文本的主要语言为: en, 占比: 1.0
+[2020-10-10 17:13:18,140 INFO] - [复制翻译] 翻译结果为: HTTPS://GitHub.com/memory D/memory tools/releases
+[2020-10-10 17:15:41,938 INFO] - [复制翻译] 剪切板文本为: ("日志", None, self.open_log, True),
+[2020-10-10 17:15:41,938 INFO] - [复制翻译] 文本的主要语言为: en, 占比: 0.75
+[2020-10-10 17:15:42,192 INFO] - [复制翻译] 译文与原文一致，因此不显示。
+[2020-10-10 17:16:08,824 INFO] - [MemoryTools] 退出程序
+
+[2020-10-10 17:16:10,301 INFO] - [MemoryTools] 启动程序
+[2020-10-10 17:16:10,510 INFO] - [plugin init] 发现插件包: plugins.01_copytrans
+[2020-10-10 17:16:10,542 INFO] - [plugin init] 发现插件包: plugins.02_ocr
+[2020-10-10 17:16:10,545 INFO] - [plugin init] 发现插件包: plugins.03_alert
+[2020-10-10 17:16:10,550 INFO] - [plugin init] 发现插件包: plugins.04_help
+[2020-10-10 17:16:10,551 INFO] - [plugin base] 初始化插件: 复制翻译
+[2020-10-10 17:16:10,552 INFO] - [plugin base] 初始化插件: OCR识别
+[2020-10-10 17:16:10,553 INFO] - [plugin base] 初始化插件: 休息提醒
+[2020-10-10 17:16:10,554 INFO] - [plugin base] 初始化插件: 帮助
+[2020-10-10 17:16:10,555 INFO] - [MemoryTools] 插件开始运行...
+[2020-10-10 17:16:10,659 INFO] - [复制翻译] 剪切板文本为: ("日志", None, self.open_log, True),
+[2020-10-10 17:16:10,662 INFO] - [复制翻译] 文本的主要语言为: en, 占比: 0.75
+[2020-10-10 17:16:12,868 INFO] - [复制翻译] 译文与原文一致，因此不显示。
+[2020-10-10 17:16:25,172 INFO] - [MemoryTools] 退出程序
+
+[2020-10-10 17:16:27,036 INFO] - [MemoryTools] 启动程序
+[2020-10-10 17:16:27,236 INFO] - [plugin init] 发现插件包: plugins.01_copytrans
+[2020-10-10 17:16:27,268 INFO] - [plugin init] 发现插件包: plugins.02_ocr
+[2020-10-10 17:16:27,271 INFO] - [plugin init] 发现插件包: plugins.03_alert
+[2020-10-10 17:16:27,276 INFO] - [plugin init] 发现插件包: plugins.04_help
+[2020-10-10 17:16:27,277 INFO] - [plugin base] 初始化插件: 复制翻译
+[2020-10-10 17:16:27,278 INFO] - [plugin base] 初始化插件: OCR识别
+[2020-10-10 17:16:27,279 INFO] - [plugin base] 初始化插件: 休息提醒
+[2020-10-10 17:16:27,280 INFO] - [plugin base] 初始化插件: 帮助
+[2020-10-10 17:16:27,281 INFO] - [MemoryTools] 插件开始运行...
+[2020-10-10 17:16:27,384 INFO] - [复制翻译] 剪切板文本为: ("日志", None, self.open_log, True),
+[2020-10-10 17:16:27,387 INFO] - [复制翻译] 文本的主要语言为: en, 占比: 0.75
+[2020-10-10 17:16:29,641 INFO] - [复制翻译] 译文与原文一致，因此不显示。
+[2020-10-10 17:16:45,969 INFO] - [MemoryTools] 退出程序
+

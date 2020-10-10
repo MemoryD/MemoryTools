@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from pathlib import Path
-from easydict import EasyDict
 from .transbox import TransBox
 from googletransx import Translator
 from tools.utils import is_check, is_pick, judge_language, paste_clip, copy_clip

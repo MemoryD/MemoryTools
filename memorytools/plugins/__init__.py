@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from importlib import import_module
 from pathlib import Path
 from tools.logger import logger

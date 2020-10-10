@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 import json
+from pathlib import Path
 from easydict import EasyDict
 from tools.logger import logger
 
@@ -30,7 +32,7 @@ class BasePlugin(object):
         2.3 config.json：托盘菜单配置文件，里面的属性会被绑定到 BasePlugin 子类中
      具体可以参阅plugins文件夹下面的几个插件。
     """
-    def __init__(self, name: str, root, icon: str, config_path):
+    def __init__(self, name: str, root, icon: str, config_path: Path):
         """
         :param name: 该插件的名字，会显示在托盘菜单中
         :param root: MemoryTools类，会由主程序自动传入

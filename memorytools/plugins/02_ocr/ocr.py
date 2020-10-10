@@ -1,5 +1,5 @@
+# -*- coding: utf-8 -*-
 from pathlib import Path
-from easydict import EasyDict
 from . import BaiduOCR
 from . import LatexOCR
 from PIL import Image, ImageGrab, ImageDraw

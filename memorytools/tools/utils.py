@@ -4,10 +4,9 @@ import os
 import re
 import pyperclip
 from time import sleep
-from base64 import b64decode, b64encode
+from base64 import b64encode
 from urllib.parse import quote
 from io import BytesIO
-from easydict import EasyDict
 from globals import *
 
 

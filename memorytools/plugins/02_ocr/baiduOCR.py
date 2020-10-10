@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from aip import AipOcr
 from PIL import Image
 from tools.utils import pil2bytes

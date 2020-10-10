@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from time import sleep, time
 from random import randint, choice
 from PIL import Image

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from webbrowser import open as open_web
 from time import sleep
 from tools.logger import logger
@@ -35,7 +37,7 @@ class MemoryTool(object):
         menu_options = []
         for plugin in self.plugins:
             menu_options.append(plugin.init_menu())
-        menu_options.append(('关于', ICON.about, self.about, True))
+        # menu_options.append(('关于', ICON.about, self.about, True))
 
         return tuple(menu_options)
 
@@ -44,12 +46,6 @@ class MemoryTool(object):
         每次用户点击托盘菜单以后，都要重新刷新菜单。
         """
         self.systray.refreshMenu(self.create_menu())
-
-    def about(self, s: SysTrayIcon):
-        """
-        菜单中的 关于 选项
-        """
-        open_web("https://github.com/MemoryD/MemoryTools")
 
     def bye(self, s: SysTrayIcon):
         """
@@ -70,7 +66,7 @@ class MemoryTool(object):
                 try:
                     plugin.start()
                 except Exception as e:
-                    logger.error(e)
+                    logger.error("[MemoryTools] %s" % e)
 
 
 if __name__ == '__main__':

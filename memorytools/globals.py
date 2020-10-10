@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from string import punctuation
 from easydict import EasyDict
 from pathlib import Path
@@ -27,6 +28,11 @@ class PATH:
 class TEXT:
     hover = "Memory Tools"
     alert = '你已经连续工作 %d 分钟了！是时候休息一下了！\ntip: 连续在电脑前工作太久容易脱发，得颈椎病，猝死。'
+
+
+class URL:
+    github = "https://github.com/MemoryD/MemoryTools"
+    release = "https://github.com/MemoryD/MemoryTools/releases"
 
 
 def get_icon():
