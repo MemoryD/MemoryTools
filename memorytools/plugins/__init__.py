@@ -1,5 +1,5 @@
 from pathlib import Path
-from .base import BasePlugin
+from .base import BasePlugin, change_config
 
 
 # plugin_path = Path() / "plugins"

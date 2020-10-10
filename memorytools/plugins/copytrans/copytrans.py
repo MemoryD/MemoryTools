@@ -6,7 +6,7 @@ from tools.boxes import TextTextBox
 from googletransx import Translator
 from tools.utils import isCheckIcon, isPickIcon, judgeLanguage, pasteClip
 from requests.exceptions import ConnectionError
-from plugins import BasePlugin
+from plugins import BasePlugin, change_config
 from globals import ICON
 
 
@@ -29,37 +29,31 @@ class CopyTrans(BasePlugin):
 
         return menu_options
 
+    @change_config
     def pauseTrans(self, sysTrayIcon):
         self.is_trans = not self.is_trans
-        self.save_config()
-        self.root.refreshMenu()
 
+    @change_config
     def en2zhMode(self, sysTrayIcon):
         self.mode = 'en2zh'
         self.src, self.dest = 'en', 'zh-cn'
-        self.save_config()
-        self.root.refreshMenu()
 
+    @change_config
     def zh2enMode(self, sysTrayIcon):
         self.mode = 'zh2en'
         self.src, self.dest = 'zh-cn', 'en'
-        self.save_config()
-        self.root.refreshMenu()
 
+    @change_config
     def bothMode(self, sysTrayIcon):
         self.mode = 'both'
-        self.save_config()
-        self.root.refreshMenu()
 
+    @change_config
     def turnStrict(self, sysTrayIcon):
         self.strict = not self.strict
-        self.save_config()
-        self.root.refreshMenu()
 
+    @change_config
     def turnNewline(self, sysTrayIcon):
         self.newline = not self.newline
-        self.save_config()
-        self.root.refreshMenu()
 
     def removeNewline(self, source):
         if not self.newline:

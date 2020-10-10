@@ -3,7 +3,7 @@ from easydict import EasyDict
 from tools.boxes import LabelBox
 from globals import TEXT, ICON
 from tools.utils import isCheckIcon, isPickIcon
-from plugins import BasePlugin
+from plugins import BasePlugin, change_config
 from pathlib import Path
 
 
@@ -30,6 +30,7 @@ class Alert(BasePlugin):
             return True
         return False
 
+    @change_config
     def pauseAlert(self, s):
         self.is_alert = not self.is_alert
         if self.is_alert:
@@ -37,28 +38,22 @@ class Alert(BasePlugin):
         else:
             print("虽然你关掉了休息提醒，但还是要注意身体！")
             # LabelBox().show("虽然你关掉了休息提醒，但还是要注意身体！", "确定")
-        self.save_config()
-        self.root.refreshMenu()
 
+    @change_config
     def changeTime30(self, s):
         self.alert_time = 30
-        self.save_config()
-        self.root.refreshMenu()
 
+    @change_config
     def changeTime60(self, s):
         self.alert_time = 60
-        self.save_config()
-        self.root.refreshMenu()
 
+    @change_config
     def changeTime90(self, s):
         self.alert_time = 90
-        self.save_config()
-        self.root.refreshMenu()
 
+    @change_config
     def changeTime120(self, s):
         self.alert_time = 120
-        self.save_config()
-        self.root.refreshMenu()
 
     def start(self):
         if self.is_alert and self.alert():

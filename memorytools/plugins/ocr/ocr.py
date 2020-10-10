@@ -7,7 +7,7 @@ from PIL import Image, ImageGrab, ImageDraw
 from tools.boxes import ImageTextBox
 from globals import BAIDU_ACCOUNTS, XUEERSI_ACCOUNTS, ICON
 from tools.utils import isCheckIcon, isPickIcon, getRect, Color, copyClip
-from plugins import BasePlugin
+from plugins import BasePlugin, change_config
 
 
 class OCR(BasePlugin):
@@ -27,25 +27,21 @@ class OCR(BasePlugin):
 
         return menu_options
 
-    def pauseOcr(self, sysTrayIcon):
+    @change_config
+    def pauseOcr(self, s):
         self.is_ocr = not self.is_ocr
-        self.save_config()
-        self.root.refreshMenu()
 
-    def textMode(self, sysTrayIcon):
+    @change_config
+    def textMode(self, s):
         self.mode = 'text'
-        self.save_config()
-        self.root.refreshMenu()
 
-    def mathMode(self, sysTrayIcon):
+    @change_config
+    def mathMode(self, s):
         self.mode = 'math'
-        self.save_config()
-        self.root.refreshMenu()
 
-    def turnNewline(self, sysTrayIcon):
+    @change_config
+    def turnNewline(self, s):
         self.newline = not self.newline
-        self.save_config()
-        self.root.refreshMenu()
 
     def start(self):
         if not self.is_ocr:
