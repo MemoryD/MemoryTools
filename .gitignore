@@ -7,5 +7,7 @@ memorytools.egg-info/
 test/
 src/
 memorytools/__pycache__/
+memorytools/log/
+*/__pycache__/
 upx-3.95-win64/
 .idea/
