@@ -2,7 +2,7 @@ from time import time
 from easydict import EasyDict
 from tools.boxes import LabelBox
 from globals import TEXT, ICON
-from tools.utils import isCheckIcon, isPickIcon
+from tools.utils import is_check, is_pick
 from plugins import BasePlugin, change_config
 from pathlib import Path
 
@@ -15,23 +15,17 @@ class Alert(BasePlugin):
 
     def create_menu(self):
         menu_options = (
-                        ("开启提醒", isCheckIcon(self.is_alert), self.pauseAlert, True),
-                        ('30分钟', isPickIcon(self.alert_time == 30), self.changeTime30, False),
-                        ('60分钟', isPickIcon(self.alert_time == 60), self.changeTime60, False),
-                        ('90分钟', isPickIcon(self.alert_time == 90), self.changeTime90, False),
-                        ('120分钟', isPickIcon(self.alert_time == 120), self.changeTime120, False),
+                        ("开启提醒", is_check(self.is_alert), self.pause_alert, True),
+                        ('30分钟', is_pick(self.alert_time == 30), self.set_alert_time_30, False),
+                        ('60分钟', is_pick(self.alert_time == 60), self.set_alert_time_60, False),
+                        ('90分钟', is_pick(self.alert_time == 90), self.set_alert_time_90, False),
+                        ('120分钟', is_pick(self.alert_time == 120), self.set_alert_time_120, False),
                         )
 
         return menu_options
 
-    def alert(self):
-        minute = (time() - self.start_time) / 60       # 分钟数
-        if minute >= self.alert_time:
-            return True
-        return False
-
     @change_config
-    def pauseAlert(self, s):
+    def pause_alert(self, s):
         self.is_alert = not self.is_alert
         if self.is_alert:
             self.start_time = time()
@@ -40,20 +34,26 @@ class Alert(BasePlugin):
             # LabelBox().show("虽然你关掉了休息提醒，但还是要注意身体！", "确定")
 
     @change_config
-    def changeTime30(self, s):
+    def set_alert_time_30(self, s):
         self.alert_time = 30
 
     @change_config
-    def changeTime60(self, s):
+    def set_alert_time_60(self, s):
         self.alert_time = 60
 
     @change_config
-    def changeTime90(self, s):
+    def set_alert_time_90(self, s):
         self.alert_time = 90
 
     @change_config
-    def changeTime120(self, s):
+    def set_alert_time_120(self, s):
         self.alert_time = 120
+
+    def alert(self):
+        minute = (time() - self.start_time) / 60       # 分钟数
+        if minute >= self.alert_time:
+            return True
+        return False
 
     def start(self):
         if self.is_alert and self.alert():

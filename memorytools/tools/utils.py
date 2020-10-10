@@ -23,7 +23,7 @@ class Color(object):
         return color
 
 
-def pasteClip():
+def paste_clip():
     """
     获取剪切板内容，为了防止获取失败，因此会重试3次
     :return:
@@ -38,19 +38,19 @@ def pasteClip():
             sleep(0.1)
 
 
-def copyClip(text):
+def copy_clip(text):
     try:
         pyperclip.copy(text)
     except Exception as e:
         print(e)
 
 
-def getTextLine(text: str):
+def get_text_line(text: str):
     """返回所给的文本有几行"""
     return len(text.split('\n'))
 
 
-def getRect(x1: int, y1: int, x2: int, y2: int):
+def get_rect(x1: int, y1: int, x2: int, y2: int):
     """给定矩形框的左上角和右下角坐标，返回四个角的坐标"""
     return [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]
 
@@ -64,13 +64,22 @@ def pil2bytes(im, img_type='png', b64=False):
     return img
 
 
-def bs64toImg(pic_code, pic_name):
+def bs64_to_img(pic_code, pic_name):
     """将bs64编码的数据写到文件中"""
     with open(pic_name, 'wb') as image:
         image.write(b64decode(pic_code))
 
 
-def resizeImg(img, max_w: int, max_h: int):
+def img_to_base64(image: str):
+    """将图像从文件中读取出来并转化为base64编码"""
+    with open(image, 'rb') as bin_data:
+        image_data = bin_data.read()
+        image_data_base64 = b64encode(image_data)
+        image_data_base64 = quote(image_data_base64)
+        return image_data_base64
+
+
+def resize_img(img, max_w: int, max_h: int):
     """
     对img进行缩放，使其长宽不超过给定的 max_w 和 max_h
     """
@@ -90,26 +99,17 @@ def resizeImg(img, max_w: int, max_h: int):
     return img
 
 
-def isCheckIcon(check: bool):
+def is_check(check: bool):
     """是否选中（两种状态）"""
     return ICON.check if check else None
 
 
-def isPickIcon(pick: bool):
+def is_pick(pick: bool):
     """是否被选中（多项中的一个）"""
     return ICON.pick if pick else None
 
 
-def img2base64(image: str):
-    """将图像从文件中读取出来并转化为base64编码"""
-    with open(image, 'rb') as bin_data:
-        image_data = bin_data.read()
-        image_data_base64 = b64encode(image_data)
-        image_data_base64 = quote(image_data_base64)
-        return image_data_base64
-
-
-def filterStr(sentence: str):
+def filter_str(sentence: str):
     """
     过滤掉字符串中的标点符号
     """
@@ -120,11 +120,11 @@ def filterStr(sentence: str):
     return sentence
 
 
-def judgeLanguage(sentence: str):
+def judge_language(sentence: str):
     """
     判断一句话里面英文和中文的占比
     """
-    sentence = filterStr(sentence)
+    sentence = filter_str(sentence)
 
     if sentence == '':
         return None, 0

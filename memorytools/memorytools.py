@@ -1,11 +1,10 @@
 import webbrowser
-from globals import TEXT, ICON
 from time import sleep
+from globals import TEXT, ICON
 from plugins.ocr import OCR
 from plugins.alert import Alert
 from plugins.copytrans import CopyTrans
 from tools.systray import SysTrayIcon
-# from tools.config import Config
 
 
 class MemoryTool(object):
@@ -14,21 +13,19 @@ class MemoryTool(object):
     """
 
     def __init__(self):
-        # self.config = Config()
-        # config = self.config.readConfig()
         copytrans = CopyTrans(self)
         ocr = OCR(self)
         alert = Alert(self)
         self.plugins = [copytrans, ocr, alert]
 
-        self.systray = SysTrayIcon(ICON.icon, TEXT.hover, self.createMenu(),
+        self.systray = SysTrayIcon(ICON.icon, TEXT.hover, self.create_menu(),
                                    on_quit=self.bye, default_menu_index=1,
                                    exit_ico=ICON.exit
                                    )
 
         self.end = False
 
-    def createMenu(self):
+    def create_menu(self):
         """创建托盘程序的菜单
         菜单中的每一项为元组，每个元组含义如下：
             第 1 项：菜单项名称
@@ -43,23 +40,11 @@ class MemoryTool(object):
 
         return tuple(menu_options)
 
-    def refreshMenu(self):
+    def refresh_menu(self):
         """
         刷新菜单
         """
-        self.systray.refreshMenu(self.createMenu())
-        # self.refreshConfig()
-
-    # def refreshConfig(self) -> None:
-    #     """
-    #     写入设置
-    #     """
-    #     config = {}
-    #     for plugin in self.plugins:
-    #         name, con = plugin.get_config()
-    #         config[name] = con
-    #
-    #     self.config.writeConfig(config)
+        self.systray.refreshMenu(self.create_menu())
 
     def about(self, s: SysTrayIcon):
         """

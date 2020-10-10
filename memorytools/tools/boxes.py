@@ -8,7 +8,7 @@ from PIL import ImageTk
 from tkinter import Tk, END
 from tkinter.ttk import Label, Button, Frame
 from tkinter.scrolledtext import ScrolledText, Text
-from tools.utils import getTextLine, resizeImg, copyClip
+from tools.utils import get_text_line, resize_img, copy_clip
 from globals import ICON
 
 
@@ -16,10 +16,10 @@ class BaseBox(Tk):
     """弹出框的基类"""
     def __init__(self, buttons=[], title='Memory Tools'):
         super(BaseBox, self).__init__()
-        self.setWindow(title)
-        self.setButton(buttons)
+        self.set_window(title)
+        self.set_button(buttons)
 
-    def setWindow(self, title: str):
+    def set_window(self, title: str):
         self.screen_w = self.winfo_screenwidth()
         self.screen_h = self.winfo_screenheight()
         self.title(title)
@@ -30,7 +30,7 @@ class BaseBox(Tk):
         min_h = self.screen_h // 3
         self.minsize(min_w, min_h)
 
-    def setButton(self, buttons: list):
+    def set_button(self, buttons: list):
         '''
         定义底部按钮
         '''
@@ -58,7 +58,7 @@ class BaseBox(Tk):
 
     def copy(self):
         txt = self.textbox.get("1.0", END)
-        copyClip(txt)
+        copy_clip(txt)
         self.destroy()
 
 
@@ -68,8 +68,8 @@ class TextTextBox(BaseBox):
         super(TextTextBox, self).__init__(buttons, title)
 
     def show(self, src: str, dest: str):
-        h1 = min(10, max(5, getTextLine(src)+1))
-        h2 = min(10, max(5, getTextLine(dest)+1))
+        h1 = min(10, max(5, get_text_line(src) + 1))
+        h2 = min(10, max(5, get_text_line(dest) + 1))
 
         self.src_text = ScrolledText(self, height=h1, background='#ffffff', font=("微软雅黑", 11))
         self.textbox = ScrolledText(self, height=h2, background='#ffffff', font=("微软雅黑", 11))
@@ -89,7 +89,7 @@ class ImageBox(BaseBox):
         super(ImageBox, self).__init__([], title)
 
     def show(self, img):
-        img = resizeImg(img, self.screen_w//3, 100000)
+        img = resize_img(img, self.screen_w // 3, 100000)
         w, h = img.size
         self.geometry('%dx%d' % (w+20, self.screen_h*2//3))
         image = ImageTk.PhotoImage(image=img)
@@ -120,7 +120,7 @@ class ImageTextBox(BaseBox):
         buttons = [('复制', self.copy), ]
         super(ImageTextBox, self).__init__(buttons, title)
 
-    def setSize(self, img):
+    def set_size(self, img):
         '''
         对图片进行处理，并限制窗口大小
         '''
@@ -129,13 +129,13 @@ class ImageTextBox(BaseBox):
 
         if img_w > img_h * aspect_ratio:
             w, h = self.screen_w * 0.9, self.screen_h * 0.35
-            img = resizeImg(img, w, h)
+            img = resize_img(img, w, h)
             img_w, img_h = img.size
             width = max(self.screen_w // 3, img_w+20)
             self.maxsize(width, int(self.screen_h*0.9))
         else:
             w, h = self.screen_w * 0.45, self.screen_h * 0.7
-            img = resizeImg(img, w, h)
+            img = resize_img(img, w, h)
             img_w, img_h = img.size
             width = max(self.screen_w // 3, 2 * img_w + 70)
             self.maxsize(width, int(self.screen_h*0.9))
@@ -146,7 +146,7 @@ class ImageTextBox(BaseBox):
         '''
         显示
         '''
-        img = self.setSize(img)
+        img = self.set_size(img)
         w, h = img.size
 
         self.tkImage = ImageTk.PhotoImage(image=img)

@@ -12,7 +12,7 @@ def change_config(set_attr):
     def wrapper(plugin, s):
         f = set_attr(plugin, s)
         plugin.save_config()
-        plugin.root.refreshMenu()
+        plugin.root.refresh_menu()
         return f
 
     return wrapper

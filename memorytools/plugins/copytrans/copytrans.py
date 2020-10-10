@@ -1,10 +1,8 @@
 from pathlib import Path
-
 from easydict import EasyDict
-
 from tools.boxes import TextTextBox
 from googletransx import Translator
-from tools.utils import isCheckIcon, isPickIcon, judgeLanguage, pasteClip
+from tools.utils import is_check, is_pick, judge_language, paste_clip
 from requests.exceptions import ConnectionError
 from plugins import BasePlugin, change_config
 from globals import ICON
@@ -19,43 +17,43 @@ class CopyTrans(BasePlugin):
 
     def create_menu(self) -> tuple:
         menu_options = (
-            ("开启翻译", isCheckIcon(self.is_trans), self.pauseTrans, True),
-            ('去除换行', isCheckIcon(not self.newline), self.turnNewline, True),
-            ('严格模式', isCheckIcon(self.strict), self.turnStrict, True),
-            ('英文 <-> 中文', isPickIcon(self.mode == 'both'), self.bothMode, False),
-            ('英文 --> 中文', isPickIcon(self.mode == 'en2zh'), self.en2zhMode, False),
-            ('中文 --> 英文', isPickIcon(self.mode == 'zh2en'), self.zh2enMode, False),
+            ("开启翻译", is_check(self.is_trans), self.pause_trans, True),
+            ('去除换行', is_check(not self.newline), self.turn_newline, True),
+            ('严格模式', is_check(self.strict), self.turn_strict, True),
+            ('英文 <-> 中文', is_pick(self.mode == 'both'), self.both_mode, False),
+            ('英文 --> 中文', is_pick(self.mode == 'en2zh'), self.en2zh_mode, False),
+            ('中文 --> 英文', is_pick(self.mode == 'zh2en'), self.zh2en_mode, False),
         )
 
         return menu_options
 
     @change_config
-    def pauseTrans(self, sysTrayIcon):
+    def pause_trans(self, s):
         self.is_trans = not self.is_trans
 
     @change_config
-    def en2zhMode(self, sysTrayIcon):
+    def en2zh_mode(self, s):
         self.mode = 'en2zh'
         self.src, self.dest = 'en', 'zh-cn'
 
     @change_config
-    def zh2enMode(self, sysTrayIcon):
+    def zh2en_mode(self, s):
         self.mode = 'zh2en'
         self.src, self.dest = 'zh-cn', 'en'
 
     @change_config
-    def bothMode(self, sysTrayIcon):
+    def both_mode(self, s):
         self.mode = 'both'
 
     @change_config
-    def turnStrict(self, sysTrayIcon):
+    def turn_strict(self, s):
         self.strict = not self.strict
 
     @change_config
-    def turnNewline(self, sysTrayIcon):
+    def turn_newline(self, s):
         self.newline = not self.newline
 
-    def removeNewline(self, source):
+    def remove_newline(self, source):
         if not self.newline:
             sentence = source.replace("\r", '').replace("\n", " ")
         else:
@@ -63,7 +61,7 @@ class CopyTrans(BasePlugin):
 
         return sentence
 
-    def preProcess(self, source):
+    def pre_process(self, source):
         '''
         对剪切板的文本进行预处理。
         首先判断是否为空或者与上次复制的一致，如果是则不翻译。
@@ -75,7 +73,7 @@ class CopyTrans(BasePlugin):
         if source == "" or source == self.last:
             return None
         text = source.strip()
-        src_language, score = judgeLanguage(text)
+        src_language, score = judge_language(text)
         print('检测为：%s, %s. 目标语言为：%s' % (src_language, score, self.dest))
         if not src_language:
             self.last = source
@@ -88,11 +86,11 @@ class CopyTrans(BasePlugin):
             self.src = src_language
             self.dest = 'en' if src_language == 'zh-cn' else 'zh-cn'
 
-        sentence = self.removeNewline(text)
+        sentence = self.remove_newline(text)
 
         return sentence
 
-    def transText(self, sentence: str):
+    def trans_text(self, sentence: str):
         for i in range(3):
             try:
                 if self.strict:
@@ -110,11 +108,11 @@ class CopyTrans(BasePlugin):
         return text
 
     def trans(self, source: str):
-        sentence = self.preProcess(source)
+        sentence = self.pre_process(source)
         if not sentence:
             return None
 
-        text = self.transText(sentence)
+        text = self.trans_text(sentence)
 
         if text == sentence:
             self.last = source
@@ -125,10 +123,10 @@ class CopyTrans(BasePlugin):
         # paste = pasteClip()
         # if paste == source:
         #     copyClip(sentence)
-        self.last = pasteClip()
+        self.last = paste_clip()
 
     def start(self):
         if not self.is_trans:  # 是否暂停
             return
-        source = pasteClip()  # 获得剪切板内容
+        source = paste_clip()  # 获得剪切板内容
         self.trans(source)
