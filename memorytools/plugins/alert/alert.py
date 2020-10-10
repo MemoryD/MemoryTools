@@ -60,3 +60,4 @@ class Alert(BasePlugin):
             alert_message = TEXT.alert % self.alert_time
             LabelBox('危险警报').show(alert_message, '等你想要继续工作了再点我')
             self.start_time = time()
+

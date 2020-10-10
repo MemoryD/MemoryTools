@@ -1,9 +1,7 @@
 import webbrowser
 from time import sleep
 from globals import TEXT, ICON
-from plugins.ocr import OCR
-from plugins.alert import Alert
-from plugins.copytrans import CopyTrans
+from plugins import plugin_list
 from tools.systray import SysTrayIcon
 
 
@@ -13,10 +11,7 @@ class MemoryTool(object):
     """
 
     def __init__(self):
-        copytrans = CopyTrans(self)
-        ocr = OCR(self)
-        alert = Alert(self)
-        self.plugins = [copytrans, ocr, alert]
+        self.plugins = [plugin(self) for plugin in plugin_list]
 
         self.systray = SysTrayIcon(ICON.icon, TEXT.hover, self.create_menu(),
                                    on_quit=self.bye, default_menu_index=1,
