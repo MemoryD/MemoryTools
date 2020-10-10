@@ -1,0 +1,67 @@
+[2020-10-10 12:33:22,347 INFO] - [plugin init] 发现插件包: plugins.01_copytrans
+[2020-10-10 12:33:22,363 INFO] - [plugin init] 发现插件包: plugins.02_ocr
+[2020-10-10 12:33:22,366 INFO] - [plugin init] 发现插件包: plugins.03_alert
+[2020-10-10 12:33:22,374 INFO] - [plugin base] 初始化插件: 复制翻译
+[2020-10-10 12:33:22,376 INFO] - [plugin base] 初始化插件: OCR识别
+[2020-10-10 12:33:22,376 INFO] - [plugin base] 初始化插件: 休息提醒
+[2020-10-10 12:33:22,378 INFO] - [Memory Tools] 程序开始运行...
+[2020-10-10 12:33:26,327 INFO] - [OCR识别] 开启OCR识别
+[2020-10-10 12:33:30,753 INFO] - [MemoryTools] 退出程序
+[2020-10-10 12:33:41,390 INFO] - [plugin init] 发现插件包: plugins.01_copytrans
+[2020-10-10 12:33:41,405 INFO] - [plugin init] 发现插件包: plugins.02_ocr
+[2020-10-10 12:33:41,407 INFO] - [plugin init] 发现插件包: plugins.03_alert
+[2020-10-10 12:33:41,415 INFO] - [plugin base] 初始化插件: 复制翻译
+[2020-10-10 12:33:41,416 INFO] - [plugin base] 初始化插件: OCR识别
+[2020-10-10 12:33:41,417 INFO] - [plugin base] 初始化插件: 休息提醒
+[2020-10-10 12:33:41,418 INFO] - [Memory Tools] 程序开始运行...
+[2020-10-10 12:36:36,904 INFO] - [MemoryTools] 退出程序
+[2020-10-10 12:36:38,764 INFO] - [plugin init] 发现插件包: plugins.01_copytrans
+[2020-10-10 12:36:38,779 INFO] - [plugin init] 发现插件包: plugins.02_ocr
+[2020-10-10 12:36:38,781 INFO] - [plugin init] 发现插件包: plugins.03_alert
+[2020-10-10 12:36:38,782 INFO] - [plugin base] 初始化插件: 复制翻译
+[2020-10-10 12:36:38,784 INFO] - [plugin base] 初始化插件: OCR识别
+[2020-10-10 12:36:38,784 INFO] - [plugin base] 初始化插件: 休息提醒
+[2020-10-10 12:36:38,785 INFO] - [Memory Tools] 程序开始运行...
+[2020-10-10 12:36:46,056 INFO] - [MemoryTools] 退出程序
+[2020-10-10 12:36:54,620 INFO] - [plugin init] 发现插件包: plugins.01_copytrans
+[2020-10-10 12:36:54,635 INFO] - [plugin init] 发现插件包: plugins.02_ocr
+[2020-10-10 12:36:54,638 INFO] - [plugin init] 发现插件包: plugins.03_alert
+[2020-10-10 12:36:54,639 INFO] - [plugin base] 初始化插件: 复制翻译
+[2020-10-10 12:36:54,641 INFO] - [plugin base] 初始化插件: OCR识别
+[2020-10-10 12:36:54,641 INFO] - [plugin base] 初始化插件: 休息提醒
+[2020-10-10 12:36:54,642 INFO] - [Memory Tools] 程序开始运行...
+[2020-10-10 12:37:04,498 INFO] - [MemoryTools] 退出程序
+
+
+[2020-10-10 12:37:31,032 INFO] - [plugin init] 发现插件包: plugins.01_copytrans
+[2020-10-10 12:37:31,046 INFO] - [plugin init] 发现插件包: plugins.02_ocr
+[2020-10-10 12:37:31,048 INFO] - [plugin init] 发现插件包: plugins.03_alert
+[2020-10-10 12:37:31,049 INFO] - [plugin base] 初始化插件: 复制翻译
+[2020-10-10 12:37:31,051 INFO] - [plugin base] 初始化插件: OCR识别
+[2020-10-10 12:37:31,051 INFO] - [plugin base] 初始化插件: 休息提醒
+[2020-10-10 12:37:31,053 INFO] - [Memory Tools] 程序开始运行...
+[2020-10-10 12:37:40,888 INFO] - [MemoryTools] 退出程序
+
+
+[2020-10-10 12:38:55,575 INFO] - [MemoryTools] 启动程序
+[2020-10-10 12:38:55,787 INFO] - [plugin init] 发现插件包: plugins.01_copytrans
+[2020-10-10 12:38:55,801 INFO] - [plugin init] 发现插件包: plugins.02_ocr
+[2020-10-10 12:38:55,804 INFO] - [plugin init] 发现插件包: plugins.03_alert
+[2020-10-10 12:38:55,805 INFO] - [plugin base] 初始化插件: 复制翻译
+[2020-10-10 12:38:55,806 INFO] - [plugin base] 初始化插件: OCR识别
+[2020-10-10 12:38:55,807 INFO] - [plugin base] 初始化插件: 休息提醒
+[2020-10-10 12:38:55,808 INFO] - [Memory Tools] 插件开始运行...
+[2020-10-10 12:39:01,212 INFO] - [MemoryTools] 退出程序
+
+[2020-10-10 12:39:11,268 INFO] - [MemoryTools] 启动程序
+[2020-10-10 12:39:11,481 INFO] - [plugin init] 发现插件包: plugins.01_copytrans
+[2020-10-10 12:39:11,497 INFO] - [plugin init] 发现插件包: plugins.02_ocr
+[2020-10-10 12:39:11,500 INFO] - [plugin init] 发现插件包: plugins.03_alert
+[2020-10-10 12:39:11,501 INFO] - [plugin base] 初始化插件: 复制翻译
+[2020-10-10 12:39:11,503 INFO] - [plugin base] 初始化插件: OCR识别
+[2020-10-10 12:39:11,503 INFO] - [plugin base] 初始化插件: 休息提醒
+[2020-10-10 12:39:11,505 INFO] - [MemoryTools] 插件开始运行...
+[2020-10-10 12:39:19,501 INFO] - [休息提醒] 关闭休息提醒
+[2020-10-10 12:39:23,637 INFO] - [休息提醒] 将休息提醒时间设置为 60 分钟.
+[2020-10-10 12:39:27,133 INFO] - [MemoryTools] 退出程序
+

@@ -20,7 +20,23 @@ def change_config(set_attr):
 
 
 class BasePlugin(object):
+    """
+    所有插件的基类，提供插件的统一运行框架。
+    每个插件都以一个模块的形式存在，假设在一个插件名为 test，则可以：
+     1. 创建一个包为 plugins/test (文件夹名字随意)
+     2. 包内至少 3 个文件：
+        2.1 __init__.py: 必须包含一个变量 plugin, 指向一个 BasePlugin 的子类
+        2.2 test.py（文件名随意）：插件的主要运行代码，其中有一个类必须继承 BasePlugin，并写到 __init__.py 中
+        2.3 config.json：托盘菜单配置文件，里面的属性会被绑定到 BasePlugin 子类中
+     具体可以参阅plugins文件夹下面的几个插件。
+    """
     def __init__(self, name: str, root, icon: str, config_path):
+        """
+        :param name: 该插件的名字，会显示在托盘菜单中
+        :param root: MemoryTools类，会由主程序自动传入
+        :param icon: 图标的路径
+        :param config_path: 配置文件的路径
+        """
         self.name = name
         self.root = root
         self.icon = icon
@@ -29,6 +45,9 @@ class BasePlugin(object):
         logger.info("[plugin base] 初始化插件: " + self.name)
 
     def init_config(self):
+        """
+        读取目录下的配置文件，并将属性绑定到类中
+        """
         config = self.config_path.read_text(encoding="utf-8")
         config = EasyDict(json.loads(config))
 
@@ -38,6 +57,10 @@ class BasePlugin(object):
         return config
 
     def save_config(self):
+        """
+        从类中获取配置的属性，并保存到文件中
+        :return:
+        """
         for attr in self.config:
             self.config[attr] = self.__getattribute__(attr)
 
@@ -45,10 +68,19 @@ class BasePlugin(object):
         self.config_path.write_text(data, encoding="utf-8")
 
     def init_menu(self) -> tuple:
+        """
+        入口菜单项
+        """
         return self.name, self.icon, self.create_menu(), True
 
     def create_menu(self) -> tuple:
+        """
+        子菜单，格式可以参考 MemoryTools 类中的 create_menu 方法
+        """
         raise NotImplementedError
 
     def start(self) -> None:
+        """
+        主要运行的函数，会被主程序重复调用
+        """
         raise NotImplementedError

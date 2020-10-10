@@ -1,9 +1,12 @@
-import webbrowser
+from webbrowser import open as open_web
 from time import sleep
+from tools.logger import logger
+
+logger.info("[MemoryTools] 启动程序")
+
+from tools.systray import SysTrayIcon
 from globals import TEXT, ICON
 from plugins import plugin_list
-from tools.logger import logger
-from tools.systray import SysTrayIcon
 
 
 class MemoryTool(object):
@@ -46,21 +49,21 @@ class MemoryTool(object):
         """
         菜单中的 关于 选项
         """
-        webbrowser.open("https://github.com/MemoryD/MemoryTools")
+        open_web("https://github.com/MemoryD/MemoryTools")
 
     def bye(self, s: SysTrayIcon):
         """
         退出程序
         """
         self.end = True
-        logger.info("[MemoryTools] 退出程序")
+        logger.info("[MemoryTools] 退出程序\n")
 
     def run(self):
         """
         启动主程序，由于tkinter组件不能在线程中结束，因此在主线程中调用
         """
         self.systray.start()
-        logger.info("[Memory Tools] 程序开始运行...")
+        logger.info("[MemoryTools] 插件开始运行...")
         while not self.end:
             sleep(0.1)
             for plugin in self.plugins:

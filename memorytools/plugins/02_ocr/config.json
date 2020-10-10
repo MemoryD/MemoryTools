@@ -1,5 +1,5 @@
 {
-    "is_ocr": false,
+    "is_ocr": true,
     "newline": false,
     "mode": "math"
 }
