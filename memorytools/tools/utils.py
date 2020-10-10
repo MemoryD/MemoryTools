@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import re
 import pyperclip
@@ -77,26 +79,6 @@ def img_to_base64(image: str):
         image_data_base64 = b64encode(image_data)
         image_data_base64 = quote(image_data_base64)
         return image_data_base64
-
-
-def resize_img(img, max_w: int, max_h: int):
-    """
-    对img进行缩放，使其长宽不超过给定的 max_w 和 max_h
-    """
-    img_w, img_h = img.size
-    if img_w < max_w and img_h < max_h:
-        return img
-
-    if img_w * max_h > img_h * max_w:
-        new_w = max_w
-        new_h = img_h * (new_w / img_w)
-        img = img.resize((int(new_w), int(new_h)))
-    else:
-        new_h = max_h
-        new_w = img_w * (new_h / img_h)
-        img = img.resize((int(new_w), int(new_h)))
-
-    return img
 
 
 def is_check(check: bool):

@@ -1,6 +1,5 @@
 from time import time
-from easydict import EasyDict
-from tools.boxes import LabelBox
+from .alertbox import AlertBox
 from globals import TEXT, ICON
 from tools.utils import is_check, is_pick
 from tools.logger import logger
@@ -64,6 +63,6 @@ class Alert(BasePlugin):
     def start(self):
         if self.is_alert and self.alert():
             alert_message = TEXT.alert % self.alert_time
-            LabelBox('危险警报').show(alert_message, '等你想要继续工作了再点我')
+            AlertBox('危险警报').show(alert_message, '等你想要继续工作了再点我')
             self.start_time = time()
 

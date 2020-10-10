@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
+
 from pathlib import Path
 from easydict import EasyDict
-from tools.boxes import TextTextBox
+from .transbox import TransBox
 from googletransx import Translator
-from tools.utils import is_check, is_pick, judge_language, paste_clip
+from tools.utils import is_check, is_pick, judge_language, paste_clip, copy_clip
 from tools.logger import logger
 from requests.exceptions import ConnectionError
 from plugins import BasePlugin, change_config
@@ -10,11 +12,14 @@ from globals import ICON
 
 
 class CopyTrans(BasePlugin):
+    """
+    一个复制翻译的插件，调用谷歌翻译的接口翻译剪切板中的文本
+    """
     def __init__(self, root) -> None:
         config_path = Path(__file__).parent / "config.json"
         super(CopyTrans, self).__init__("复制翻译", root, ICON.trans, config_path)
-        self.last = ''  # 记录上次的剪切板内容
-        self.translator = Translator(service_urls=['translate.google.cn'])  # 获得翻译接口
+        self.last = ''      # 记录上次的剪切板内容
+        self.translator = self.get_translator()     # 获得翻译接口
 
     def create_menu(self) -> tuple:
         menu_options = (
@@ -27,6 +32,10 @@ class CopyTrans(BasePlugin):
         )
 
         return menu_options
+
+    @classmethod
+    def get_translator(cls):
+        return Translator(service_urls=['translate.google.cn'])
 
     @change_config
     def pause_trans(self, s):
@@ -86,28 +95,42 @@ class CopyTrans(BasePlugin):
         如果是互译模式，根据检测结果设置源语言和目标语言。
         再判断是否要去除其中的换行。
         '''
+        # 判断是否为空或与之前的内容一致
         if source == "" or source == self.last:
             return None
+        # 去除文本两端的空格
         text = source.strip()
+        logger.info("[复制翻译] 剪切板文本为: %s" % text)
+        # 检测文本的语言
         src_language, score = judge_language(text)
-        msg = '检测为: %s, %s. 目标语言为: %s' % (src_language, score, self.dest)
-        logger.info("[复制翻译] " + msg)
+        msg = "[复制翻译] 文本的主要语言为: %s, 占比: %s" % (src_language, score)
+        logger.info(msg)
+        # 文本中不含中英文则不翻译
         if not src_language:
             self.last = source
+            logger.info("[复制翻译] 文本中不含中英文，因此不翻译.")
             return None
+        # 文本中目标语言的占比过大则不翻译
         if self.mode != 'both' and src_language == self.dest and score > 0.8:
+            logger.info("[复制翻译] 文本中目标语言的占比过大，因此不翻译.")
             self.last = source
             return None
-
+        # 如果是中英互译，则根据检测的语言设置源语言和目标语言
         if self.mode == 'both':
             self.src = src_language
             self.dest = 'en' if src_language == 'zh-cn' else 'zh-cn'
-
+        # 去除换行符
         sentence = self.remove_newline(text)
 
         return sentence
 
     def trans_text(self, sentence: str):
+        """
+        使用接口翻译文本，由于可能会失败，因此这里会重连三次
+        :param sentence: 待翻译的文本
+        :return: 翻译后的文本
+        """
+        text = sentence
         for i in range(3):
             try:
                 if self.strict:
@@ -116,15 +139,20 @@ class CopyTrans(BasePlugin):
                     text = self.translator.translate(sentence, dest=self.dest).text
                 return text
             except ConnectionError as ce:
-                print(ce)
-                self.translator = Translator(service_urls=['translate.google.cn'])
+                logger.error("[复制翻译] 连接失败: %s" % ce)
+                self.translator = self.get_translator()
                 text = str(ce)
             except Exception as e:
-                print(e)
+                logger.error("[复制翻译] 翻译出错: %s" % e)
                 text = str(e)
         return text
 
     def trans(self, source: str):
+        """
+        对文本进行处理，看是否需要翻译，若否则不处理，若是则调用接口进行翻译并进行显示
+        :param source: 待处理的文本
+        :return:
+        """
         sentence = self.pre_process(source)
         if not sentence:
             return None
@@ -135,11 +163,11 @@ class CopyTrans(BasePlugin):
             self.last = source
             logger.info('[复制翻译] 译文与原文一致，因此不显示。')
             return None
-        # print("%s\n%s\n" % (sentence, text))
-        TextTextBox('翻译结果').show(sentence, text)
-        # paste = pasteClip()
-        # if paste == source:
-        #     copyClip(sentence)
+        logger.info('[复制翻译] 翻译结果为: %s' % text)
+        TransBox(copy_trans=self).show(sentence, text)
+        paste = paste_clip()
+        if paste == source:
+            copy_clip(sentence)
         self.last = paste_clip()
 
     def start(self):

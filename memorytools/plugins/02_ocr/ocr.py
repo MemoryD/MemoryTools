@@ -3,7 +3,7 @@ from easydict import EasyDict
 from . import BaiduOCR
 from . import LatexOCR
 from PIL import Image, ImageGrab, ImageDraw
-from tools.boxes import ImageTextBox
+from .ocrbox import OcrBox
 from tools.logger import logger
 from globals import BAIDU_ACCOUNTS, XUEERSI_ACCOUNTS, ICON
 from tools.utils import is_check, is_pick, get_rect, Color, copy_clip
@@ -73,7 +73,7 @@ class OCR(BasePlugin):
                 text = str(e)
 
             copy_clip('')
-            ImageTextBox('OCR识别结果').show(im, text)
+            OcrBox('OCR识别结果').show(im, text)
 
 
 if __name__ == '__main__':
