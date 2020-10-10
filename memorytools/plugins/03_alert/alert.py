@@ -3,6 +3,7 @@ from easydict import EasyDict
 from tools.boxes import LabelBox
 from globals import TEXT, ICON
 from tools.utils import is_check, is_pick
+from tools.logger import logger
 from plugins import BasePlugin, change_config
 from pathlib import Path
 
@@ -29,25 +30,30 @@ class Alert(BasePlugin):
         self.is_alert = not self.is_alert
         if self.is_alert:
             self.start_time = time()
+            logger.info("[休息提醒] 开启休息提醒")
         else:
-            print("虽然你关掉了休息提醒，但还是要注意身体！")
+            logger.info("[休息提醒] 关闭休息提醒")
             # LabelBox().show("虽然你关掉了休息提醒，但还是要注意身体！", "确定")
 
     @change_config
     def set_alert_time_30(self, s):
         self.alert_time = 30
+        logger.info("[休息提醒] 将休息提醒时间设置为 30 分钟.")
 
     @change_config
     def set_alert_time_60(self, s):
         self.alert_time = 60
+        logger.info("[休息提醒] 将休息提醒时间设置为 60 分钟.")
 
     @change_config
     def set_alert_time_90(self, s):
         self.alert_time = 90
+        logger.info("[休息提醒] 将休息提醒时间设置为 90 分钟.")
 
     @change_config
     def set_alert_time_120(self, s):
         self.alert_time = 120
+        logger.info("[休息提醒] 将休息提醒时间设置为 120 分钟.")
 
     def alert(self):
         minute = (time() - self.start_time) / 60       # 分钟数

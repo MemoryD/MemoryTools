@@ -2,6 +2,7 @@ import webbrowser
 from time import sleep
 from globals import TEXT, ICON
 from plugins import plugin_list
+from tools.logger import logger
 from tools.systray import SysTrayIcon
 
 
@@ -37,7 +38,7 @@ class MemoryTool(object):
 
     def refresh_menu(self):
         """
-        刷新菜单
+        每次用户点击托盘菜单以后，都要重新刷新菜单。
         """
         self.systray.refreshMenu(self.create_menu())
 
@@ -52,17 +53,21 @@ class MemoryTool(object):
         退出程序
         """
         self.end = True
-        print('bye')
+        logger.info("[MemoryTools] 退出程序")
 
     def run(self):
         """
-        启动主程序
+        启动主程序，由于tkinter组件不能在线程中结束，因此在主线程中调用
         """
         self.systray.start()
+        logger.info("[Memory Tools] 程序开始运行...")
         while not self.end:
             sleep(0.1)
             for plugin in self.plugins:
-                plugin.start()
+                try:
+                    plugin.start()
+                except Exception as e:
+                    logger.error(e)
 
 
 if __name__ == '__main__':

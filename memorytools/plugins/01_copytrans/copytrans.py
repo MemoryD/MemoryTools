@@ -3,6 +3,7 @@ from easydict import EasyDict
 from tools.boxes import TextTextBox
 from googletransx import Translator
 from tools.utils import is_check, is_pick, judge_language, paste_clip
+from tools.logger import logger
 from requests.exceptions import ConnectionError
 from plugins import BasePlugin, change_config
 from globals import ICON
@@ -30,28 +31,43 @@ class CopyTrans(BasePlugin):
     @change_config
     def pause_trans(self, s):
         self.is_trans = not self.is_trans
+        if self.is_trans:
+            logger.info("[复制翻译] 开启复制翻译")
+        else:
+            logger.info("[复制翻译] 关闭复制翻译")
 
     @change_config
     def en2zh_mode(self, s):
         self.mode = 'en2zh'
         self.src, self.dest = 'en', 'zh-cn'
+        logger.info("[复制翻译] 切换翻译模式为: 英译中")
 
     @change_config
     def zh2en_mode(self, s):
         self.mode = 'zh2en'
         self.src, self.dest = 'zh-cn', 'en'
+        logger.info("[复制翻译] 切换翻译模式为: 中译英")
 
     @change_config
     def both_mode(self, s):
         self.mode = 'both'
+        logger.info("[复制翻译] 切换翻译模式为: 中英互译")
 
     @change_config
     def turn_strict(self, s):
         self.strict = not self.strict
+        if self.strict:
+            logger.info("[复制翻译] 开启严格模式")
+        else:
+            logger.info("[复制翻译] 关闭严格模式")
 
     @change_config
     def turn_newline(self, s):
         self.newline = not self.newline
+        if not self.newline:
+            logger.info("[复制翻译] 开启去除换行")
+        else:
+            logger.info("[复制翻译] 关闭去除换行")
 
     def remove_newline(self, source):
         if not self.newline:
@@ -74,7 +90,8 @@ class CopyTrans(BasePlugin):
             return None
         text = source.strip()
         src_language, score = judge_language(text)
-        print('检测为：%s, %s. 目标语言为：%s' % (src_language, score, self.dest))
+        msg = '检测为: %s, %s. 目标语言为: %s' % (src_language, score, self.dest)
+        logger.info("[复制翻译] " + msg)
         if not src_language:
             self.last = source
             return None
@@ -116,7 +133,7 @@ class CopyTrans(BasePlugin):
 
         if text == sentence:
             self.last = source
-            print('译文与原文一致，因此不显示。')
+            logger.info('[复制翻译] 译文与原文一致，因此不显示。')
             return None
         # print("%s\n%s\n" % (sentence, text))
         TextTextBox('翻译结果').show(sentence, text)

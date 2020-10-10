@@ -1,5 +1,6 @@
 import json
 from easydict import EasyDict
+from tools.logger import logger
 
 
 def change_config(set_attr):
@@ -25,6 +26,7 @@ class BasePlugin(object):
         self.icon = icon
         self.config_path = config_path
         self.config = self.init_config()
+        logger.info("[plugin base] 初始化插件: " + self.name)
 
     def init_config(self):
         config = self.config_path.read_text(encoding="utf-8")
@@ -42,14 +44,11 @@ class BasePlugin(object):
         data = json.dumps(self.config, indent=4, ensure_ascii=False)
         self.config_path.write_text(data, encoding="utf-8")
 
-    # def create_default_config(self) -> EasyDict:
-    #     raise NotImplementedError
-
-    def create_menu(self) -> tuple:
-        return ()
-
     def init_menu(self) -> tuple:
         return self.name, self.icon, self.create_menu(), True
 
-    def start(self):
+    def create_menu(self) -> tuple:
+        raise NotImplementedError
+
+    def start(self) -> None:
         raise NotImplementedError
