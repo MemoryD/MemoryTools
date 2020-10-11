@@ -1,11 +1,11 @@
 '''
 @name: __init__
 @author: Memory
-@date: 2020/03/20
+@date: 2020/10/11
 '''
 
 
 __title__ = 'memorytools'
-__version__ = '1.6.1'
+__version__ = '2.0.0'
 __author__ = 'Memory'
 __copyright__ = 'Copyright 2020 Memory'

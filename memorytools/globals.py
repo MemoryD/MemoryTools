@@ -23,6 +23,7 @@ class PATH:
     config = cwd / 'config'
     icon = cwd / 'src' / 'icon'
     log = cwd / 'log'
+    config.mkdir(parents=True, exist_ok=True)
 
 
 class TEXT:

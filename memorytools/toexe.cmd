@@ -1,0 +1,1 @@
+pyinstaller memorytools.py -i ..\src\icon.ico --upx-dir ..\upx-3.95-win64
