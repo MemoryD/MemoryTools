@@ -26,10 +26,9 @@ class BasePlugin(object):
     所有插件的基类，提供插件的统一运行框架。
     每个插件都以一个模块的形式存在，假设在一个插件名为 test，则可以：
      1. 创建一个包为 plugins/test (文件夹名字随意)
-     2. 包内至少 3 个文件：
+     2. 包内至少 2 个文件：
         2.1 __init__.py: 必须包含一个变量 plugin, 指向一个 BasePlugin 的子类
         2.2 test.py（文件名随意）：插件的主要运行代码，其中有一个类必须继承 BasePlugin，并写到 __init__.py 中
-        2.3 config.json：托盘菜单配置文件，里面的属性会被绑定到 BasePlugin 子类中
      具体可以参阅plugins文件夹下面的几个插件。
     """
     def __init__(self, name: str, root, icon: str, config_path: Path):
@@ -43,15 +42,18 @@ class BasePlugin(object):
         self.root = root
         self.icon = icon
         self.config_path = config_path
-        self.config = self.init_config()
         logger.info("[plugin base] 初始化插件: " + self.name)
 
     def init_config(self):
         """
-        读取目录下的配置文件，并将属性绑定到类中
+        读取目录下的配置文件，并将属性绑定到类中，
+        如果没有配置文件，则使用默认的配置
         """
-        config = self.config_path.read_text(encoding="utf-8")
-        config = EasyDict(json.loads(config))
+        if not self.config_path.exists():
+            config = self.create_default_config()
+        else:
+            config = self.config_path.read_text(encoding="utf-8")
+            config = json.loads(config)
 
         for attr, value in config.items():
             self.__setattr__(attr, value)
@@ -68,6 +70,12 @@ class BasePlugin(object):
 
         data = json.dumps(self.config, indent=4, ensure_ascii=False)
         self.config_path.write_text(data, encoding="utf-8")
+
+    def create_default_config(self) -> dict:
+        """
+        返回默认的配置
+        """
+        return {}
 
     def init_menu(self) -> tuple:
         """

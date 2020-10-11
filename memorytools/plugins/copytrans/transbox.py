@@ -15,6 +15,10 @@ class TransBox(BaseBox):
         根据用户的更改重新进行翻译
         """
         sentence = self.src_text.get("1.0", END)
+        sentence = self.copy_trans.remove_newline(sentence)
+        self.src_text.delete("1.0", END)
+        self.src_text.insert(END, sentence)
+
         text = self.copy_trans.trans_text(sentence)
         self.textbox.delete("1.0", END)
         self.textbox.insert(END, text)

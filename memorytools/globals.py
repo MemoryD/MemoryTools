@@ -20,13 +20,13 @@ icon_bs64 = {
 class PATH:
     cwd = Path()
     plugins = cwd / 'plugins'
-    config = plugins / 'config.json'
+    config = cwd / 'config'
     icon = cwd / 'src' / 'icon'
     log = cwd / 'log'
 
 
 class TEXT:
-    hover = "Memory Tools v1.8.0"
+    hover = "Memory Tools v2.0.0 beta"
     alert = '你已经连续工作 %d 分钟了！是时候休息一下了！\ntip: 连续在电脑前工作太久容易脱发，得颈椎病，猝死。'
 
 

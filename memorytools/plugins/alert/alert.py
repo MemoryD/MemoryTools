@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from time import time
 from .alertbox import AlertBox
-from globals import TEXT, ICON
+from globals import TEXT, ICON, PATH
 from tools.utils import is_check, is_pick
 from tools.logger import logger
 from plugins import BasePlugin, change_config
@@ -10,8 +10,10 @@ from pathlib import Path
 
 class Alert(BasePlugin):
     def __init__(self, root) -> None:
-        config_path = Path(__file__).parent / "config.json"
+        # config_path = Path(__file__).parent / "config.json"
+        config_path = PATH.config / ("%s.json" % Path(__file__).stem)
         super(Alert, self).__init__("休息提醒", root, ICON.alert,  config_path)
+        self.config = self.init_config()
         self.start_time = time()
 
     def create_menu(self):
@@ -24,6 +26,13 @@ class Alert(BasePlugin):
                         )
 
         return menu_options
+
+    def create_default_config(self) -> dict:
+        config = {
+            "is_alert": True,
+            "alert_time": 90
+        }
+        return config
 
     @change_config
     def pause_alert(self, s):

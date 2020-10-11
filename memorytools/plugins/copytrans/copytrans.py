@@ -7,7 +7,7 @@ from tools.utils import is_check, is_pick, judge_language, paste_clip, copy_clip
 from tools.logger import logger
 from requests.exceptions import ConnectionError
 from plugins import BasePlugin, change_config
-from globals import ICON
+from globals import ICON, PATH
 
 
 class CopyTrans(BasePlugin):
@@ -15,9 +15,11 @@ class CopyTrans(BasePlugin):
     一个复制翻译的插件，调用谷歌翻译的接口翻译剪切板中的文本
     """
     def __init__(self, root) -> None:
-        config_path = Path(__file__).parent / "config.json"
+        # config_path = Path(__file__).parent / "config.json"
+        config_path = PATH.config / ("%s.json" % Path(__file__).stem)
         super(CopyTrans, self).__init__("复制翻译", root, ICON.trans, config_path)
-        self.last = ''      # 记录上次的剪切板内容
+        self.config = self.init_config()
+        self.last = ''                              # 记录上次的剪切板内容
         self.translator = self.get_translator()     # 获得翻译接口
 
     def create_menu(self) -> tuple:
@@ -31,6 +33,17 @@ class CopyTrans(BasePlugin):
         )
 
         return menu_options
+
+    def create_default_config(self) -> dict:
+        config = {
+            "is_trans": True,
+            "newline": False,
+            "strict": False,
+            "mode": "both",
+            "src": "en",
+            "dest": "zh-cn"
+        }
+        return config
 
     @classmethod
     def get_translator(cls):

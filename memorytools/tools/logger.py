@@ -3,6 +3,7 @@
 import logging
 import logging.handlers
 from sys import stdout
+from pathlib import Path
 
 
 class Logger(object):
@@ -20,6 +21,7 @@ class Logger(object):
         self.logger.addHandler(ch)
 
         if log_file:
+            log_file.parent.mkdir(parents=True, exist_ok=True)
             fh = logging.handlers.TimedRotatingFileHandler(log_file, when='D', interval=1, backupCount=30)
             fh.setLevel(log_level)
             fh.setFormatter(formatter)
@@ -29,7 +31,7 @@ class Logger(object):
         return self.logger
 
 
-logger = Logger(log_file="log/memorytools.log").get_logger()
+logger = Logger(log_file=Path("log/memorytools.log")).get_logger()
 
 if __name__ == '__main__':
     # logger = Logger().get_logger()

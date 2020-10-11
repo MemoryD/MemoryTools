@@ -5,15 +5,17 @@ from . import LatexOCR
 from PIL import Image, ImageGrab, ImageDraw
 from .ocrbox import OcrBox
 from tools.logger import logger
-from globals import BAIDU_ACCOUNTS, XUEERSI_ACCOUNTS, ICON
+from globals import BAIDU_ACCOUNTS, XUEERSI_ACCOUNTS, ICON, PATH
 from tools.utils import is_check, is_pick, get_rect, Color, copy_clip
 from plugins import BasePlugin, change_config
 
 
 class OCR(BasePlugin):
     def __init__(self, root):
-        config_path = Path(__file__).parent / "config.json"
+        # config_path = Path(__file__).parent / "config.json"
+        config_path = PATH.config / ("%s.json" % Path(__file__).stem)
         super(OCR, self).__init__("OCR识别", root, ICON.ocr, config_path)
+        self.config = self.init_config()
         self.text_ocr = BaiduOCR(BAIDU_ACCOUNTS)
         self.math_ocr = LatexOCR(XUEERSI_ACCOUNTS)
 
@@ -26,6 +28,14 @@ class OCR(BasePlugin):
         )
 
         return menu_options
+
+    def create_default_config(self) -> dict:
+        config = {
+            "is_ocr": True,
+            "newline": False,
+            "mode": "text"
+        }
+        return config
 
     @change_config
     def pause_ocr(self, s):

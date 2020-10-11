@@ -8,8 +8,9 @@ from plugins import BasePlugin
 
 class Help(BasePlugin):
     def __init__(self, root) -> None:
-        config_path = Path(__file__).parent / "config.json"
+        config_path = PATH.config / ("%s.json" % Path(__file__).stem)
         super(Help, self).__init__("帮助", root, ICON.about, config_path)
+        self.config = self.init_config()
 
     def about(self, s):
         """
