@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-
+"""
+@file: utils
+@author: Memory
+@date: 2020/10/11
+@description: 在项目中用到的一些方法定义
+"""
 import os
 import re
 import pyperclip

@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+@name: globals
+@author: Memory
+@date: 2020/10/11
+@description: 一些全局变量的定义
+"""
 from string import punctuation
 from easydict import EasyDict
 from pathlib import Path

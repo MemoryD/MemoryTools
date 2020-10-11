@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+@file: alert
+@author: Memory
+@date: 2020/10/11
+@description: 用于休息提醒
+"""
 from time import time
 from .alertbox import AlertBox
 from globals import TEXT, ICON, PATH

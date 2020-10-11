@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+@file: help
+@author: Memory
+@date: 2020/10/11
+@description: 帮助插件的定义
+"""
 from os import startfile
 from pathlib import Path
 from webbrowser import open as open_web

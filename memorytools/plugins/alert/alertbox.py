@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+@file: alertbox
+@author: Memory
+@date: 2020/10/11
+@description: 休息提醒的弹出框定义
+"""
 from tkinter.ttk import Label
 from tools.basebox import BaseBox
 

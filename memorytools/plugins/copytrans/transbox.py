@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+@file: basebox
+@author: Memory
+@date: 2020/10/11
+@description: 复制翻译的弹出框
+"""
 from tkinter.scrolledtext import ScrolledText
 from tools.basebox import BaseBox, END
 from tools.utils import get_text_line

@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
-
-from webbrowser import open as open_web
+"""
+@name: memorytools
+@author: Memory
+@date: 2020/10/11
+@description: 项目的入口文件
+"""
 from time import sleep
 from tools.logger import logger
 
@@ -52,7 +56,6 @@ class MemoryTool(object):
         退出程序
         """
         self.end = True
-        logger.info("[MemoryTools] 退出程序\n")
 
     def run(self):
         """
@@ -67,6 +70,7 @@ class MemoryTool(object):
                     plugin.start()
                 except Exception as e:
                     logger.error("[MemoryTools] %s" % e)
+        logger.info("[MemoryTools] 退出程序\n")
 
 
 if __name__ == '__main__':

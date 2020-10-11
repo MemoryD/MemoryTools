@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+@file: ocr
+@author: Memory
+@date: 2020/10/11
+@description: ocr插件的定义
+"""
 from pathlib import Path
 from . import BaiduOCR
 from . import LatexOCR

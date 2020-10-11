@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-
+"""
+@file: logger
+@author: Memory
+@date: 2020/10/11
+@description: 自定义一个日志生成器
+"""
 import logging
 import logging.handlers
 from sys import stdout

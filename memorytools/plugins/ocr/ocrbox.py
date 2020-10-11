@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+@file: ocrbox
+@author: Memory
+@date: 2020/10/11
+@description: ocr弹出框的定义
+"""
 from tkinter import Label, END
 from tkinter.scrolledtext import ScrolledText
 from PIL import ImageTk

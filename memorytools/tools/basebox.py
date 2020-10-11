@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-@file: basebox.py
+@file: basebox
 @author: Memory
-@date: 2020/3/23
+@date: 2020/10/11
 @description: 自定义弹出框的基类，可以在插件中调用
 """
 

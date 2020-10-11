@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-
+"""
+@file: copytrans
+@author: Memory
+@date: 2020/10/11
+@description: 复制翻译插件的定义
+"""
 from pathlib import Path
 from .transbox import TransBox
 from googletransx import Translator

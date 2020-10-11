@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+@file: baiduOCR
+@author: Memory
+@date: 2020/10/11
+@description: 百度OCR的接口
+"""
 from aip import AipOcr
 from PIL import Image
 from tools.utils import pil2bytes

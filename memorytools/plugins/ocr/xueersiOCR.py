@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+@file: xueersiOCR
+@author: Memory
+@date: 2020/10/11
+@description: 学而思OCR的接口
+"""
 from time import sleep, time
 from random import randint, choice
 from PIL import Image

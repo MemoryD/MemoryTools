@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
+"""
+@file: base
+@author: Memory
+@date: 2020/10/11
+@description: 所有插件的基类，提供插件的统一运行框架。
+"""
 import json
 from pathlib import Path
-from easydict import EasyDict
 from tools.logger import logger
 
 
