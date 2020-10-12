@@ -16,31 +16,35 @@ class TransBox(BaseBox):
         super(TransBox, self).__init__(buttons, title)
         self.copy_trans = copy_trans
 
+    def set_text(self, textbox, text):
+        textbox.delete("1.0", END)
+        textbox.insert(END, text)
+
     def retrans(self):
         """
         根据用户的更改重新进行翻译
         """
         sentence = self.src_text.get("1.0", END)
         sentence = self.copy_trans.remove_newline(sentence)
-        self.src_text.delete("1.0", END)
-        self.src_text.insert(END, sentence)
+
+        self.set_text(self.src_text, sentence)
+        self.set_text(self.dest_text, "翻译中，请稍候...")
 
         text = self.copy_trans.trans_text(sentence)
-        self.textbox.delete("1.0", END)
-        self.textbox.insert(END, text)
+        self.set_text(self.dest_text, text)
 
     def show(self, src: str, dest: str):
         h1 = min(10, max(5, get_text_line(src) + 1))
         h2 = min(10, max(5, get_text_line(dest) + 1))
 
         self.src_text = ScrolledText(self, height=h1, background='#ffffff', font=("微软雅黑", 11))
-        self.textbox = ScrolledText(self, height=h2, background='#ffffff', font=("微软雅黑", 11))
+        self.dest_text = ScrolledText(self, height=h2, background='#ffffff', font=("微软雅黑", 11))
 
         self.src_text.insert(END, str(src))
         self.src_text.config()
-        self.textbox.insert(END, str(dest))
+        self.dest_text.insert(END, str(dest))
 
         self.src_text.pack(side='top', padx=10, pady=10)
-        self.textbox.pack(side='top', padx=10, pady=10)
+        self.dest_text.pack(side='top', padx=10, pady=10)
 
         self.start()

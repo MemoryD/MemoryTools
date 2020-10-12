@@ -20,10 +20,13 @@ class MemoryTool(object):
     程序的入口类
     """
 
+    version = "v2.0.0 beta"
+
     def __init__(self):
         self.plugins = [plugin(self) for plugin in plugin_list]
 
-        self.systray = SysTrayIcon(ICON.icon, TEXT.hover, self.create_menu(),
+        hover_text = "MemoryTools " + self.version
+        self.systray = SysTrayIcon(ICON.icon, hover_text, self.create_menu(),
                                    on_quit=self.bye, default_menu_index=1,
                                    exit_ico=ICON.exit
                                    )

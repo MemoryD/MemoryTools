@@ -33,7 +33,7 @@ class PATH:
 
 
 class TEXT:
-    hover = "Memory Tools v2.0.0 beta"
+    hover = "Memory Tools"
     alert = '你已经连续工作 %d 分钟了！是时候休息一下了！\ntip: 连续在电脑前工作太久容易脱发，得颈椎病，猝死。'
 
 
