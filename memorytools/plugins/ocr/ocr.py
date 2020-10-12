@@ -43,7 +43,7 @@ class OCR(BasePlugin):
         return config
 
     @change_config
-    def pause_ocr(self, s):
+    def pause_ocr(self, option_text):
         self.is_ocr = not self.is_ocr
         if self.is_ocr:
             logger.info("[OCR识别] 开启OCR识别")
@@ -51,17 +51,17 @@ class OCR(BasePlugin):
             logger.info("[OCR识别] 关闭OCR识别")
 
     @change_config
-    def text_mode(self, s):
+    def text_mode(self, option_text):
         self.mode = 'text'
         logger.info("[OCR识别] 切换OCR识别模式为: 文本")
 
     @change_config
-    def math_mode(self, s):
+    def math_mode(self, option_text):
         self.mode = 'math'
         logger.info("[OCR识别] 切换OCR识别模式为: 公式")
 
     @change_config
-    def turn_newline(self, s):
+    def turn_newline(self, option_text):
         self.newline = not self.newline
         if not self.newline:
             logger.info("[OCR识别] 开启去除换行")

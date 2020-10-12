@@ -34,7 +34,8 @@ class PATH:
 
 class TEXT:
     hover = "Memory Tools"
-    alert = '你已经连续工作 %d 分钟了！是时候休息一下了！\ntip: 连续在电脑前工作太久容易脱发，得颈椎病，猝死。'
+    rest_alert = '你已经连续工作 %d 分钟了！是时候休息一下了！\ntip: 连续在电脑前工作太久容易脱发，得颈椎病，猝死。'
+    slack_alert = '你已经连续摸鱼 %d 分钟了！是时候工作一下了！\ntip: 连续摸鱼太久容易延毕，失业，流落街头。'
 
 
 class URL:

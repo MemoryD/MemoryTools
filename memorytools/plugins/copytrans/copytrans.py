@@ -54,7 +54,7 @@ class CopyTrans(BasePlugin):
         return Translator(service_urls=['translate.google.cn'])
 
     @change_config
-    def pause_trans(self, s):
+    def pause_trans(self, option_text):
         self.is_trans = not self.is_trans
         if self.is_trans:
             logger.info("[复制翻译] 开启复制翻译")
@@ -62,24 +62,24 @@ class CopyTrans(BasePlugin):
             logger.info("[复制翻译] 关闭复制翻译")
 
     @change_config
-    def en2zh_mode(self, s):
+    def en2zh_mode(self, option_text):
         self.mode = 'en2zh'
         self.src, self.dest = 'en', 'zh-cn'
         logger.info("[复制翻译] 切换翻译模式为: 英译中")
 
     @change_config
-    def zh2en_mode(self, s):
+    def zh2en_mode(self, option_text):
         self.mode = 'zh2en'
         self.src, self.dest = 'zh-cn', 'en'
         logger.info("[复制翻译] 切换翻译模式为: 中译英")
 
     @change_config
-    def both_mode(self, s):
+    def both_mode(self, option_text):
         self.mode = 'both'
         logger.info("[复制翻译] 切换翻译模式为: 中英互译")
 
     @change_config
-    def turn_strict(self, s):
+    def turn_strict(self, option_text):
         self.strict = not self.strict
         if self.strict:
             logger.info("[复制翻译] 开启严格模式")
@@ -87,7 +87,7 @@ class CopyTrans(BasePlugin):
             logger.info("[复制翻译] 关闭严格模式")
 
     @change_config
-    def turn_newline(self, s):
+    def turn_newline(self, option_text):
         self.newline = not self.newline
         if not self.newline:
             logger.info("[复制翻译] 开启去除换行")

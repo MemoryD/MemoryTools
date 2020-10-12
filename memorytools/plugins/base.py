@@ -17,8 +17,8 @@ def change_config(set_attr):
     :param set_attr: 更改属性的函数
     :return: 装饰过的函数
     """
-    def wrapper(plugin, s):
-        f = set_attr(plugin, s)
+    def wrapper(plugin, option_text):
+        f = set_attr(plugin, option_text)
         plugin.save_config()
         plugin.root.refresh_menu()
         return f

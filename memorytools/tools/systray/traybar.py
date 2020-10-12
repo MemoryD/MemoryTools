@@ -49,7 +49,6 @@ class SysTrayIcon(object):
         self.exit_ico = exit_ico
 
         self.refreshMenu(menu_options)
-        print(self._menu_options)
 
         # menu_options = menu_options or ()
         # menu_options = menu_options + (('退出', None, SysTrayIcon.QUIT),)
