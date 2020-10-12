@@ -49,6 +49,7 @@ class SysTrayIcon(object):
         self.exit_ico = exit_ico
 
         self.refreshMenu(menu_options)
+        print(self._menu_options)
 
         # menu_options = menu_options or ()
         # menu_options = menu_options + (('退出', None, SysTrayIcon.QUIT),)
@@ -76,12 +77,14 @@ class SysTrayIcon(object):
         self._register_class()
 
     def refreshMenu(self, menu_options):
-        '''留了一个外部刷新菜单的函数，可以动态改变菜单'''
+        """留了一个外部刷新菜单的函数，可以动态改变菜单"""
         menu_options = menu_options + (('退出', self.exit_ico, self.QUIT, False),)
         self._next_action_id = self.FIRST_ID
         self._menu_actions_by_id = set()
+        self._menu_actions_by_name = set()
         self._menu_options = self._add_ids_to_menu_options(list(menu_options))
         self._menu_actions_by_id = dict(self._menu_actions_by_id)
+        self._menu_actions_by_name = dict(self._menu_actions_by_name)
 
     def __enter__(self):
         """Context manager so SysTray can automatically close"""
@@ -158,6 +161,7 @@ class SysTrayIcon(object):
             option_text, option_icon, option_action, option_separator = menu_option
             if callable(option_action) or option_action in SysTrayIcon.SPECIAL_ACTIONS:
                 self._menu_actions_by_id.add((self._next_action_id, option_action))
+                self._menu_actions_by_name.add((self._next_action_id, option_text))
                 result.append(menu_option + (self._next_action_id,))
             elif non_string_iterable(option_action):
                 result.append((option_text,
@@ -227,6 +231,7 @@ class SysTrayIcon(object):
 
     def _notify(self, hwnd, msg, wparam, lparam):
         if lparam == WM_LBUTTONDBLCLK:
+            print(self._default_menu_index)
             self._execute_menu_option(self._default_menu_index + SysTrayIcon.FIRST_ID)
         elif lparam == WM_RBUTTONUP:
             self._show_menu()
@@ -308,11 +313,12 @@ class SysTrayIcon(object):
         self._execute_menu_option(id)
 
     def _execute_menu_option(self, id):
+        option_text = self._menu_actions_by_name[id]
         menu_action = self._menu_actions_by_id[id]
         if menu_action == SysTrayIcon.QUIT:
             DestroyWindow(self._hwnd)
         else:
-            menu_action(self)
+            menu_action(option_text)
 
 def non_string_iterable(obj):
     try:
