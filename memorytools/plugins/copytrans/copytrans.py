@@ -20,8 +20,7 @@ class CopyTrans(BasePlugin):
     一个复制翻译的插件，调用谷歌翻译的接口翻译剪切板中的文本
     """
     def __init__(self, root) -> None:
-        # config_path = Path(__file__).parent / "config.json"
-        config_path = PATH.config / ("%s.json" % Path(__file__).stem)
+        config_path = PATH.config / ("%s.json" % self.__class__.__name__)
         super(CopyTrans, self).__init__("复制翻译", root, ICON.trans, config_path)
         self.config = self.init_config()
         self.last = ''                              # 记录上次的剪切板内容

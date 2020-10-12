@@ -14,10 +14,14 @@ from plugins import BasePlugin, change_config
 from pathlib import Path
 
 
+class BaseAlert(BasePlugin):
+    def __init__(self):
+        pass
+
+
 class Alert(BasePlugin):
     def __init__(self, root) -> None:
-        # config_path = Path(__file__).parent / "config.json"
-        config_path = PATH.config / ("%s.json" % Path(__file__).stem)
+        config_path = PATH.config / ("%s.json" % self.__class__.__name__)
         super(Alert, self).__init__("休息提醒", root, ICON.alert,  config_path)
         self.config = self.init_config()
         self.start_time = time()

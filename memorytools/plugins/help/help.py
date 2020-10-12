@@ -14,7 +14,7 @@ from plugins import BasePlugin
 
 class Help(BasePlugin):
     def __init__(self, root) -> None:
-        config_path = PATH.config / ("%s.json" % Path(__file__).stem)
+        config_path = PATH.config / ("%s.json" % self.__class__.__name__)
         super(Help, self).__init__("帮助", root, ICON.about, config_path)
         self.config = self.init_config()
 

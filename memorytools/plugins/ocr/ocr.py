@@ -18,8 +18,7 @@ from plugins import BasePlugin, change_config
 
 class OCR(BasePlugin):
     def __init__(self, root):
-        # config_path = Path(__file__).parent / "config.json"
-        config_path = PATH.config / ("%s.json" % Path(__file__).stem)
+        config_path = PATH.config / ("%s.json" % self.__class__.__name__)
         super(OCR, self).__init__("OCR识别", root, ICON.ocr, config_path)
         self.config = self.init_config()
         self.text_ocr = BaiduOCR(BAIDU_ACCOUNTS)
