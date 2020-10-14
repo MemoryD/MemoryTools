@@ -23,7 +23,7 @@ class Alert(BasePlugin):
 
         self.slack_start_time = time()
         self.last_screen = ImageGrab.grab().getdata()
-        self.check_interval = 10
+        self.check_interval = 60
         self.last_check_time = time()
         self.similarity_thresold = 0.96
 

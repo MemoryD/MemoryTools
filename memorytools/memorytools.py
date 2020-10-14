@@ -20,7 +20,7 @@ class MemoryTool(object):
     程序的入口类
     """
 
-    version = "v2.1.0 beta"
+    version = "v2.1.0"
 
     def __init__(self):
         self.plugins = [plugin(self) for plugin in plugin_list]
