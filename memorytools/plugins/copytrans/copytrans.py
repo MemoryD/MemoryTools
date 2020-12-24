@@ -2,12 +2,12 @@
 """
 @file: copytrans
 @author: Memory
-@date: 2020/10/11
+@date: 2020/12/24
 @description: 复制翻译插件的定义
 """
 from pathlib import Path
 from .transbox import TransBox
-from googletransx import Translator
+from google_trans_new import google_translator
 from tools.utils import is_check, is_pick, judge_language, paste_clip, copy_clip
 from tools.logger import logger
 from requests.exceptions import ConnectionError
@@ -51,7 +51,7 @@ class CopyTrans(BasePlugin):
 
     @classmethod
     def get_translator(cls):
-        return Translator(service_urls=['translate.google.cn'])
+        return google_translator()
 
     @change_config
     def pause_trans(self, option_text):
@@ -150,9 +150,9 @@ class CopyTrans(BasePlugin):
         for i in range(3):
             try:
                 if self.strict:
-                    text = self.translator.translate(sentence, src=self.src, dest=self.dest).text
+                    text = self.translator.translate(sentence, lang_src=self.src, lang_tgt=self.dest)
                 else:
-                    text = self.translator.translate(sentence, dest=self.dest).text
+                    text = self.translator.translate(sentence, lang_tgt=self.dest)
                 return text
             except ConnectionError as ce:
                 logger.error("[复制翻译] 连接失败: %s" % ce)

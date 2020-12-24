@@ -11,6 +11,8 @@ from webbrowser import open as open_web
 from globals import ICON, PATH, URL
 from plugins import BasePlugin
 
+#
+
 
 class Help(BasePlugin):
     def __init__(self, root) -> None:

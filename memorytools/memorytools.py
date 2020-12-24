@@ -2,7 +2,7 @@
 """
 @name: memorytools
 @author: Memory
-@date: 2020/10/11
+@date: 2020/12/24
 @description: 项目的入口文件
 """
 from time import sleep
@@ -20,7 +20,7 @@ class MemoryTool(object):
     程序的入口类
     """
 
-    version = "v2.1.0"
+    version = "v2.2.0"
 
     def __init__(self):
         self.plugins = [plugin(self) for plugin in plugin_list]
